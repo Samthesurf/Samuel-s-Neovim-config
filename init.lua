@@ -202,8 +202,7 @@ require("lazy").setup({
     },
     {
         "nvim-lualine/lualine.nvim",
-        requires = { "nvim-tree/nvim-web-devicons" },
-        opt = true,
+        dependencies = { "nvim-tree/nvim-web-devicons" },
     },
     {
         "folke/zen-mode.nvim",
@@ -627,6 +626,7 @@ vim.api.nvim_set_keymap("n", "<leader>cl", ":LspInfo<cr>", { desc = "Lsp Info" }
 vim.api.nvim_set_keymap("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
 vim.api.nvim_set_keymap("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 vim.keymap.set("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
+vim.keymap.set("n", "<leader>ih",":lua vim.lsp.inlay_hint(0,nil)<CR>", {desc = "Toggle Inlay Hints", silent = true})
 vim.keymap.set("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
 vim.keymap.set("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
 vim.api.nvim_set_keymap("n", "<leader>k", ":lua vim.lsp.buf.definition()<CR>", { desc = "Show definition" })
