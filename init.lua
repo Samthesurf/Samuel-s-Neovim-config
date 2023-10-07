@@ -218,9 +218,24 @@ require("lazy").setup({
     },
     {
         "mfussenegger/nvim-dap",
+        keys = {
+            {
+                "<leader>db",mode = "n",":DapToggleBreakpoint<CR>",desc = "Toggle Breakpoint"
+            },{
+                "<leader>dc",mode = "n",":DapContinue<CR>", desc = "Start debugging"
+            },{
+                "<leader>dt", mode = "n",":DapStepOver<CR>", desc = "Step Over"
+            }
+        }
     },
     {
         "mfussenegger/nvim-dap-python",
+        ft = "python",
+        dependencies = {
+            "mfussenegger/nvim-dap",
+            "rcarriga/nvim-dap-ui",
+            "theHamsta/nvim-dap-virtual-text",
+        }
     },
     {
         "goolord/alpha-nvim",
@@ -238,6 +253,22 @@ require("lazy").setup({
     },
     {
         "rcarriga/nvim-dap-ui",
+        dependencies = "mfussenegger/nvim-dap",
+        config = function()
+            local dap = require("dap")
+            local dapui = require("dapui")
+            dapui.setup()
+            dap.listeners.after.event_initialized["dapui_config"] = function ()
+                dapui.open()
+            end
+            dap.listeners.before.event_terminated["dapui_config"] = function()
+                dapui.close()
+            end
+            dap.listeners.before.event_exited["dapui_config"] = function()
+                dapui.close()
+            end
+
+        end
     },
     {
         "folke/neodev.nvim",
@@ -532,7 +563,7 @@ require("lualine").setup({
 })
 --require('git').setup {}
 --require("fzf").setup{}
-require("dap-python").setup("/usr/bin/python3")
+require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
 --which-key
 require("which-key").setup({
     plugins = {
