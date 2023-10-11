@@ -762,7 +762,7 @@ vim.keymap.set("n", "<BS>", "dh")
 --require("evil_lualine.evil_lualine")
 vim.cmd([[let g:auto_save = 1]])
 vim.cmd([[let g:auto_save_silent = 1]])
--- require("catppuccin").setup({ flavour = "mocha" })
+require("catppuccin").setup({ flavour = "macchiato" })
 vim.cmd([[colorscheme kanagawa]])
 require("bufferline").setup({
     options = {
