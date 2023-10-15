@@ -208,9 +208,6 @@ require("lazy").setup({
         "folke/zen-mode.nvim",
     },
     {
-        -- 'dinhhuy258/git.nvim'
-    },
-    {
         "RRethy/vim-illuminate",
     },
     {
@@ -239,13 +236,32 @@ require("lazy").setup({
     },
     {
         "goolord/alpha-nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-        config = function()
-            require("alpha").setup(require("alpha.themes.startify").config)
-        end,
-    },
-    {
-        -- 'onsails/lspkind.nvim'
+config = function()
+      local dashboard = require("alpha.themes.dashboard")
+      local logo =[[
+  ████████                       ██           ████     ██          ██
+ ██░░░░░░                       ░░█          ░██░██   ░██         ░░
+░██         ██████   ██████████  ░   ██████  ░██░░██  ░██ ██    ██ ██ ██████████
+░█████████ ░░░░░░██ ░░██░░██░░██    ██░░░░   ░██ ░░██ ░██░██   ░██░██░░██░░██░░██
+░░░░░░░░██  ███████  ░██ ░██ ░██   ░░█████   ░██  ░░██░██░░██ ░██ ░██ ░██ ░██ ░██
+       ░██ ██░░░░██  ░██ ░██ ░██    ░░░░░██  ░██   ░░████ ░░████  ░██ ░██ ░██ ░██
+ ████████ ░░████████ ███ ░██ ░██    ██████   ░██    ░░███  ░░██   ░██ ███ ░██ ░██   TM.
+░░░░░░░░   ░░░░░░░░ ░░░  ░░  ░░    ░░░░░░    ░░      ░░░    ░░    ░░ ░░░  ░░  ░░   
+      ]]
+      dashboard.section.header.val = vim.split(logo, "\n")
+      -- stylua: ignore
+      dashboard.section.buttons.val = {
+        dashboard.button("f", " " .. " Find file",       "<cmd> Telescope find_files <cr>"),
+        dashboard.button("n", " " .. " New file",        "<cmd> ene <BAR> startinsert <cr>"),
+        dashboard.button("r", " " .. " Recent files",    "<cmd> Telescope oldfiles <cr>"),
+        dashboard.button("g", " " .. " Find text",       "<cmd> Telescope live_grep <cr>"),
+        dashboard.button("c", " " .. " Config",          "<cmd> e $MYVIMRC <cr>"),
+        dashboard.button("s", " " .. " Restore Session", [[<cmd> lua require("persistence").load() <cr>]]),
+        dashboard.button("l", "󰒲 " .. " Lazy",            "<cmd> Lazy <cr>"),
+        dashboard.button("q", " " .. " Quit",            "<cmd> qa <cr>"),
+      }
+require("alpha").setup(dashboard.opts)
+    end,
     },
     {
         "nvimtools/none-ls.nvim",
@@ -562,7 +578,6 @@ require("lualine").setup({
     },
 })
 --require('git').setup {}
---require("fzf").setup{}
 require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
 --which-key
 require("which-key").setup({
