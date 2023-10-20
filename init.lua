@@ -59,9 +59,6 @@ require("lazy").setup({
 		run = ":TSUpdate",
 	},
 	{
-		-- "sharkdp/fd"
-	},
-	{
 		"nvim-tree/nvim-web-devicons",
 	},
 	{
@@ -157,9 +154,6 @@ require("lazy").setup({
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
-	},
-	{
-		-- "windwp/windline.nvim"
 	},
 	{
 		"lewis6991/gitsigns.nvim",
@@ -313,13 +307,7 @@ require("lazy").setup({
 	{
 		"JoosepAlviste/nvim-ts-context-commentstring",
 	},
-	{
-		-- "simrat39/inlay-hints.nvim", enabled = false
-	},
-	{
-		--'nvim-pack/nvim-spectre'
-	},
-	{
+    {
 		"iamcco/markdown-preview.nvim",
 		event = "VeryLazy",
 	},
@@ -336,10 +324,7 @@ require("lazy").setup({
 		name = "catppuccin",
 		priority = 1000,
 	},
-	{
-		-- "folke/twilight.nvim"
-	},
-	{
+    {
 		"petertriho/nvim-scrollbar",
 	},
 	{
@@ -347,12 +332,6 @@ require("lazy").setup({
 	},
 	{
 		"rcarriga/nvim-notify",
-	},
-	{
-		-- "ggandor/leap.nvim", dependencies = { "tpope/vim-repeat" }
-	},
-	{
-		-- "tpope/vim-repeat"
 	},
 	{
 		"EdenEast/nightfox.nvim",
@@ -462,7 +441,6 @@ require("gitsigns").setup({})
 require("colorizer").setup({})
 vim.cmd[[au BufEnter * :ColorizerToggle]]
 -- vim.cmd[[au BufEnter * :ColorizerToggle]]
---require('wlsample.evil_line')
 require("treesitter-context").setup({})
 require("nvim-autopairs").setup({})
 -- require('telescope').load_extension('dap')
@@ -596,7 +574,6 @@ require("lualine").setup({
 		lualine_x = { lspinfo_component, surfer, "filetype" },
 	},
 })
---require('git').setup {}
 require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
 --which-key
 require("which-key").setup({
@@ -647,7 +624,6 @@ require("neodev").setup({
 	library = { plugins = { "nvim-dap-ui" }, types = true },
 })
 require("code_runner").setup({})
--- require('persistence').setup{}
 require("betterTerm").setup({})
 vim.cmd([[
   augroup toggleterm
@@ -701,7 +677,6 @@ vim.api.nvim_set_keymap("n", "<leader>fd", ":lua vim.lsp.buf.format{timeout_ms =
 vim.api.nvim_set_keymap("n", "p", "P", { noremap = true })
 vim.api.nvim_set_keymap("n", "yy", "0y$", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>a", "gg0vG$", { desc = "highlight entire document" })
--- vim.api.nvim_set_keymap("i", "<A><A>", "<C-c>", { desc = "Entering normal mode" })
 vim.api.nvim_set_keymap("n", "<leader>vs", ":VimGameSnake<CR>", { desc = "Play Vim Snake" })
 vim.api.nvim_set_keymap("n", "<leader>ss", ":echo g:VimSnakeScore<CR>", { desc = "See Snake score" })
 vim.keymap.set("n", "<leader>ga", ":G add .<CR>", { desc = "git add your changes", silent = true })
@@ -775,25 +750,12 @@ require("neo-tree").setup({
 			"document_symbols",
 		},
 	},
-	-- view = {
-	--     side = 'right',
-	--     number = true,
-	--     relativenumber = true,
-	--     width = 45,
-	--     -- show_header = true,
-	--     -- header_title = "Sam's Files",
-	-- },
-	-- renderer = {
-	--     highlight_diagnostics = true,
-	--     highlight_git = true,
-	-- }
 })
--- require("leap").add_default_mappings()
+
 vim.keymap.set("n", "S", function()
 	require("flash").treesitter()
 end, { desc = "Flash Treesitter" })
 vim.keymap.set("n", "<BS>", "dh")
---require("evil_lualine.evil_lualine")
 vim.cmd([[let g:auto_save = 1]])
 vim.cmd([[let g:auto_save_silent = 1]])
 require("catppuccin").setup({ flavour = "macchiato" })
@@ -832,7 +794,6 @@ nvim_lsp.html.setup({
 })
 
 -- require'lspconfig'.pylyzer.setup{}
--- local ih = require("inlay-hints")
 nvim_lsp.clangd.setup({
 	cmd = { "clangd", "--clang-tidy" },
 	filetypes = { "c", "cpp" },
