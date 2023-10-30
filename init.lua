@@ -1,4 +1,4 @@
-vim.o.mouse = ""
+vim.o.mouse = "a"
 vim.opt.number = true
 vim.o.splitbelow = true
 vim.o.splitright = true
@@ -73,8 +73,8 @@ require("lazy").setup({
 	},
 	{
 		"williamboman/mason.nvim",
-		opts = {
-			ensure_installed = {
+	 	-- opts = function ()
+			 ensure_installed = {
 				"pyright",
 				"ruff",
 				"ruff-lsp",
@@ -86,11 +86,15 @@ require("lazy").setup({
 				"html-lsp",
 				"emmet-language-server",
 				"vale",
-			},
-		},
+			}
+          -- return ensure_installed
+      ,
+        config = function(_,opts)
+            require("mason").setup(opts)
 		vim.api.nvim_create_user_command("MasonInstallAll", function()
-			vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
-		end, {}),
+		vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
+		end, {})
+    end,
 	},
 	{
 		"neovim/nvim-lspconfig",
@@ -144,8 +148,7 @@ require("lazy").setup({
                 "Treesitter Search"
             },
             { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-        }
-,
+        },
 	},
 	{
 		"akinsho/bufferline.nvim",
@@ -391,6 +394,18 @@ require("lazy").setup({
 	{
 		"norcalli/nvim-colorizer.lua",
 	},
+    {
+        "Exafunction/codeium.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "hrsh7th/nvim-cmp",
+        },
+        config = function ()
+            require("codeium").setup({})
+        end
+    },{
+        "RRethy/nvim-base16",
+    }
 })
 
 -- vim.keymap.set('n', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
@@ -567,7 +582,7 @@ require("lualine").setup({
 	options = {
 		-- section_separators = { left = '', right = '' },
 		-- component_separators = { left = '', right = '' },
-		theme = "tokyonight",
+		theme = "ayu_mirage",
 	},
 	sections = {
 		lualine_c = { "filename" },
@@ -596,7 +611,7 @@ local null_ls = require("null-ls")
 null_ls.setup({
 	sources = {
 		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.formatting.black,
+		-- null_ls.builtins.formatting.black,
 		-- null_ls.builtins.diagnostics.mypy,
 	},
 })
@@ -781,6 +796,7 @@ nvim_lsp.pyright.setup({
 		},
 	},
 })
+nvim_lsp.bashls.setup({})
 nvim_lsp.emmet_language_server.setup({})
 nvim_lsp.cssls.setup({})
 nvim_lsp.jsonls.setup({})
@@ -920,8 +936,8 @@ cmp.setup({
 		-- Accept currently selected item. If none selected, `select` first item.
 		-- Set `select` to `false` to only confirm explicitly selected items.
 		["<CR>"] = cmp.mapping.confirm({ select = true }),
-		["<Tab>"] = cmp.mapping.confirm({ select = true }),
-		["<Down>"] = cmp.mapping(function(fallback)
+		-- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+		["<Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_next_item()
 			elseif luasnip.expandable() then
@@ -937,7 +953,7 @@ cmp.setup({
 			"i",
 			"s",
 		}),
-		["<Up>"] = cmp.mapping(function(fallback)
+		["<S-Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_prev_item()
 			elseif luasnip.jumpable(-1) then
@@ -961,6 +977,7 @@ cmp.setup({
 				luasnip = "[Snippet]",
 				buffer = "[Buffer]",
 				path = "[Path]",
+                codeium = "AI",
 			})[entry.source.name]
 			return vim_item
 		end,
@@ -970,6 +987,7 @@ cmp.setup({
 		{ name = "luasnip" },
 		{ name = "buffer" },
 		{ name = "path" },
+        { name = "codeium"},
 	},
 	confirm_opts = {
 		behavior = cmp.ConfirmBehavior.Replace,
