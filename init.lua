@@ -1,5 +1,6 @@
 vim.o.mouse = "a"
 vim.opt.number = true
+vim.opt.relativenumber = true
 vim.o.splitbelow = true
 vim.o.splitright = true
 vim.o.incsearch = true
@@ -19,7 +20,6 @@ if vim.g.neovide then
 end
 -- on save current directory for the buffer becomes the directory for Neovim
 vim.cmd([[au BufWritePre * cd %:p:h]])
-vim.opt.relativenumber = true
 vim.api.nvim_set_var("mapleader", " ")
 vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 vim.api.nvim_set_keymap("n", "dir", ":pwd<CR>", { noremap = true, silent = true })
@@ -366,7 +366,6 @@ require("lazy").setup({
 		-- "stevearc/conform.nvim",
 		-- event = "BufReadPre",
 	},
-	{ "dense-analysis/ale", enabled = false },
 	{
 		"utilyre/barbecue.nvim",
 		name = "barbecue",
@@ -455,7 +454,6 @@ require("mason-lspconfig").setup({})
 require("gitsigns").setup({})
 require("colorizer").setup({})
 vim.cmd[[au BufEnter * :ColorizerToggle]]
--- vim.cmd[[au BufEnter * :ColorizerToggle]]
 require("treesitter-context").setup({})
 require("nvim-autopairs").setup({})
 -- require('telescope').load_extension('dap')
@@ -628,13 +626,6 @@ vim.g.transparent_enabled = true
 -- })
 -- Format Python files on save
 vim.cmd([[au BufWritePre *.py :lua vim.lsp.buf.format{timeout_ms = 10000}]])
--- vim.cmd([[
--- augroup format
--- autocmd!
--- autocmd FileType python noremap <buffer> <Esc>
--- \ :silent !black %<CR>
--- augroup END
--- ]])
 require("neodev").setup({
 	library = { plugins = { "nvim-dap-ui" }, types = true },
 })
