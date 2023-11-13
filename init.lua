@@ -262,8 +262,8 @@ require("lazy").setup({
 			dashboard.section.header.val = vim.split(logo, "\n")
       -- stylua: ignore
       dashboard.section.buttons.val = {
-        dashboard.button("f", " " .. " Find file",       "<cmd> Telescope find_files <cr>"),
-        dashboard.button("n", " " .. " New file",        "<cmd> ene <BAR> startinsert <cr>"),
+        dashboard.button("f", " " .. " Find file",       "<cmd> FZF <cr>"),
+        dashboard.button("n", " " .. " New file",        "<cmd> CreateFile<cr>"),
         dashboard.button("r", " " .. " Recent files",    "<cmd> Telescope oldfiles <cr>"),
         dashboard.button("g", " " .. " Find text",       "<cmd> Telescope live_grep <cr>"),
         dashboard.button("c", " " .. " Config",          "<cmd> e $MYVIMRC <cr>"),
@@ -354,9 +354,6 @@ require("lazy").setup({
 		enabled = false,
 	},
 	{
-		"natecraddock/workspaces.nvim",
-	},
-	{
 		"christoomey/vim-tmux-navigator",
 	},
 	{
@@ -404,6 +401,11 @@ require("lazy").setup({
         end
     },{
         "RRethy/nvim-base16",
+    },{
+        "aikooo7/funnyfiles.nvim",
+    },
+    {
+        "simrat39/rust-tools.nvim",
     }
 })
 
@@ -451,13 +453,14 @@ require("mason").setup({
 	},
 })
 require("mason-lspconfig").setup({})
+require("rust-tools").setup{}
 require("gitsigns").setup({})
 require("colorizer").setup({})
 vim.cmd[[au BufEnter * :ColorizerToggle]]
 require("treesitter-context").setup({})
 require("nvim-autopairs").setup({})
 -- require('telescope').load_extension('dap')
-require("workspaces").setup({})
+--require("workspaces").setup({})
 require("Comment").setup({
 	pre_hook = function(ctx)
 		local U = require("Comment.utils")
@@ -790,6 +793,9 @@ nvim_lsp.pyright.setup({
 nvim_lsp.bashls.setup({})
 nvim_lsp.emmet_language_server.setup({})
 nvim_lsp.cssls.setup({})
+-- nvim_lsp.rust_analyzer.setup({
+--     cmd = {"rust-analyzer"},
+-- })
 nvim_lsp.jsonls.setup({})
 nvim_lsp.ruff_lsp.setup({})
 --Enable (broadcasting) snippet capability for completion
@@ -859,6 +865,7 @@ vim.keymap.set("n", "i", "a")
 -- <A means alt
 vim.api.nvim_set_keymap("n", "<A-r>", ":RunCode<CR>:starti<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
+vim.keymap.set("n","<leader>n",":CreateFile<CR>", {desc = "Create new file", silent = true})
 
 --nvim-cmp
 local cmp_status_ok, cmp = pcall(require, "cmp")
@@ -964,10 +971,10 @@ cmp.setup({
 			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
 			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
 			vim_item.menu = ({
-				nvim_lsp = "[LSP]",
-				luasnip = "[Snippet]",
-				buffer = "[Buffer]",
-				path = "[Path]",
+				nvim_lsp = "LSP",
+				luasnip = "Snippet",
+				buffer = "Buffer",
+				path = "Path",
                 codeium = "AI",
 			})[entry.source.name]
 			return vim_item
