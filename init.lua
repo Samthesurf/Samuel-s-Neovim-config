@@ -22,6 +22,7 @@ end
 vim.cmd([[au BufWritePre * cd %:p:h]])
 vim.api.nvim_set_var("mapleader", " ")
 vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", {silent = true})
 vim.api.nvim_set_keymap("n", "dir", ":pwd<CR>", { noremap = true, silent = true })
 -- Change diagnostic signs.
 vim.fn.sign_define("DiagnosticSignError", { text = "❌", texthl = "DiagnosticSignError" })
@@ -250,20 +251,21 @@ require("lazy").setup({
 		config = function()
 			local dashboard = require("alpha.themes.dashboard")
 			local logo = [[
-  ████████                       ██           ████     ██          ██
- ██░░░░░░                       ░░█          ░██░██   ░██         ░░
-░██         ██████   ██████████  ░   ██████  ░██░░██  ░██ ██    ██ ██ ██████████
-░█████████ ░░░░░░██ ░░██░░██░░██    ██░░░░   ░██ ░░██ ░██░██   ░██░██░░██░░██░░██
-░░░░░░░░██  ███████  ░██ ░██ ░██   ░░█████   ░██  ░░██░██░░██ ░██ ░██ ░██ ░██ ░██
-       ░██ ██░░░░██  ░██ ░██ ░██    ░░░░░██  ░██   ░░████ ░░████  ░██ ░██ ░██ ░██
- ████████ ░░████████ ███ ░██ ░██    ██████   ░██    ░░███  ░░██   ░██ ███ ░██ ░██   TM.
-░░░░░░░░   ░░░░░░░░ ░░░  ░░  ░░    ░░░░░░    ░░      ░░░    ░░    ░░ ░░░  ░░  ░░   
-      ]]
-			dashboard.section.header.val = vim.split(logo, "\n")
+.▄▄ ·  ▄▄▄· • ▌ ▄ ·.   .▄▄ · ▄• ▄▌▄▄▄  ·▄▄▄.▄▄ ·   
+▐█ ▀. ▐█ ▀█ ·██ ▐███▪  ▐█ ▀. █▪██▌▀▄ █·▐▄▄·▐█ ▀.   
+▄▀▀▀█▄▄█▀▀█ ▐█ ▌▐▌▐█·  ▄▀▀▀█▄█▌▐█▌▐▀▀▄ ██▪ ▄▀▀▀█▄  
+▐█▄▪▐█▐█ ▪▐▌██ ██▌▐█▌  ▐█▄▪▐█▐█▄█▌▐█•█▌██▌.▐█▄▪▐█ ࿐w࿐a࿐v࿐e࿐s࿐ 
+ ▀▀▀▀  ▀  ▀ ▀▀  █▪▀▀▀   ▀▀▀▀  ▀▀▀ .▀  ▀▀▀▀  ▀▀▀▀   
+            ]]
+            local footer = [[
+ ______ ╚(ಠ_ಠ)=┐ '''⌐(ಠ۾ಠ)¬''' ᕙ(⇀‸↼‶)ᕗ (︶︹︺) ( ͡ಠ ͜ʖ ͡ಠ) ಠ_ಠ¯ \_(ツ)_/¯  ______
+            ]]
+         dashboard.section.header.val = vim.split(logo, "\n")
+         dashboard.section.footer.val = vim.split(footer, "\n")
       -- stylua: ignore
       dashboard.section.buttons.val = {
         dashboard.button("f", " " .. " Find file",       "<cmd> FZF <cr>"),
-        dashboard.button("n", " " .. " New file",        "<cmd> CreateFile<cr>"),
+        dashboard.button("n", " " .. " New file",        "<cmd> New<cr>"),
         dashboard.button("r", " " .. " Recent files",    "<cmd> Telescope oldfiles <cr>"),
         dashboard.button("g", " " .. " Find text",       "<cmd> Telescope live_grep <cr>"),
         dashboard.button("c", " " .. " Config",          "<cmd> e $MYVIMRC <cr>"),
@@ -402,10 +404,21 @@ require("lazy").setup({
     },{
         "RRethy/nvim-base16",
     },{
-        "aikooo7/funnyfiles.nvim",
+        -- "aikooo7/funnyfiles.nvim",
     },
     {
         "simrat39/rust-tools.nvim",
+    },{
+        "chrisgrieser/nvim-genghis",
+    },{
+        "ibhagwan/fzf-lua"
+    },{
+        "lewis6991/hover.nvim",
+    },{
+        "smjonas/inc-rename.nvim",
+        config = function ()
+            require("inc_rename").setup()
+        end,
     }
 })
 
@@ -460,7 +473,6 @@ vim.cmd[[au BufEnter * :ColorizerToggle]]
 require("treesitter-context").setup({})
 require("nvim-autopairs").setup({})
 -- require('telescope').load_extension('dap')
---require("workspaces").setup({})
 require("Comment").setup({
 	pre_hook = function(ctx)
 		local U = require("Comment.utils")
@@ -502,6 +514,38 @@ require("scrollbar").setup({
 		Misc = { color = colors.purple },
 	},
 })
+require("hover").setup {
+            init = function()
+                -- Require providers
+                require("hover.providers.lsp")
+                -- require('hover.providers.gh')
+                -- require('hover.providers.gh_user')
+                -- require('hover.providers.jira')
+                -- require('hover.providers.man')
+                -- require('hover.providers.dictionary')
+            end,
+            preview_opts = {
+                border = 'single'
+            },
+            -- Whether the contents of a currently open hover window should be moved
+            -- to a :h preview-window when pressing the hover keymap.
+            preview_window = false,
+            title = false,
+            mouse_providers = {
+                'LSP'
+            },
+            mouse_delay = 500
+        }
+
+        -- Setup keymaps
+        -- vim.keymap.set("n", "K", require("hover").hover, {desc = "hover.nvim"})
+        vim.keymap.set("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
+
+        -- Mouse support
+        vim.keymap.set('n', '<MouseMove>', require('hover').hover_mouse, { desc = "hover.nvim (mouse)" })
+        vim.o.mousemoveevent = true
+
+
 require("barbecue").setup({
 	theme = {
 		-- this highlight is used to override other highlights
@@ -654,7 +698,7 @@ require("noice").setup({
 		bottom_search = true, -- use a classic bottom cmdline for search
 		command_palette = true, -- position the cmdline and popupmenu together
 		long_message_to_split = true, -- long messages will be sent to a split
-		inc_rename = false, -- enables an input dialog for inc-rename.nvim
+		inc_rename = true, -- enables an input dialog for inc-rename.nvim
 		lsp_doc_border = false, -- add a border to hover docs and signature help
 	},
 })
@@ -697,6 +741,11 @@ vim.keymap.set("n", "<C-Up>", "<C-w>+", { desc = "Increasing height" })
 vim.keymap.set("n", "<C-Down>", "<C-w>-", { desc = "Decreasing height" })
 vim.keymap.set("n", "<leader>tb", ":Telescope buffers<CR>", { desc = "open buffers", silent = true })
 vim.keymap.set("n", "<leader>te", ":terminal<CR>starti<CR>", { desc = "open Terminal", silent = true })
+vim.keymap.set("n", "<leader>rn",
+function()
+    return ":IncRename " .. vim.fn.expand("<cword>")
+end,
+    {desc = "Lsp Rename", silent = true, expr = true})
 -- Define the key mappings
 vim.api.nvim_set_keymap("n", "<A-1>", ":ToggleTerm direction=horizontal size=20<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<A-2>", ":ToggleTerm direction=vertical size=60<CR>", { noremap = true, silent = true })
@@ -704,13 +753,14 @@ vim.api.nvim_set_keymap("n", "<A-3>", ":ToggleTerm direction=float<CR>", { norem
 vim.api.nvim_set_keymap("i", "<C-s>", "<Esc>:w<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>qa", ":qall<CR>", { desc = "Close Neovim" })
-vim.api.nvim_set_keymap("n", "<leader>of", ":Telescope oldfiles<CR>", { desc = "Recent Files" })
+vim.api.nvim_set_keymap("n", "<leader>of", ":FzfLua oldfiles<CR>", { desc = "Recent Files" })
 vim.api.nvim_set_keymap("n", "<leader>fz", ":cd ~<CR>:FZF<CR>", { desc = "fzf" })
 vim.api.nvim_set_keymap("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
 vim.api.nvim_set_keymap("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
 vim.api.nvim_set_keymap("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
 vim.api.nvim_set_keymap("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
 vim.api.nvim_set_keymap("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
+vim.api.nvim_set_keymap("n", "<leader>fl", ":FzfLua<CR>", {desc = "fzf lua", silent = true})
 --Running code lol
 -- NOTE: If clangd or clang doesn't work as intended, do the following
 -- 1) for Linux: clang -v, check the location of GCC it's checking to run, then do sudo apt install libstdc++-12-dev if the gcc version is 12 or 13 if the version is 13
@@ -793,9 +843,7 @@ nvim_lsp.pyright.setup({
 nvim_lsp.bashls.setup({})
 nvim_lsp.emmet_language_server.setup({})
 nvim_lsp.cssls.setup({})
--- nvim_lsp.rust_analyzer.setup({
---     cmd = {"rust-analyzer"},
--- })
+nvim_lsp.tsserver.setup({})
 nvim_lsp.jsonls.setup({})
 nvim_lsp.ruff_lsp.setup({})
 --Enable (broadcasting) snippet capability for completion
@@ -865,7 +913,7 @@ vim.keymap.set("n", "i", "a")
 -- <A means alt
 vim.api.nvim_set_keymap("n", "<A-r>", ":RunCode<CR>:starti<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
-vim.keymap.set("n","<leader>n",":CreateFile<CR>", {desc = "Create new file", silent = true})
+vim.keymap.set("n","<leader>n",":New<CR>", {desc = "Create new file", silent = true})
 
 --nvim-cmp
 local cmp_status_ok, cmp = pcall(require, "cmp")
@@ -971,21 +1019,21 @@ cmp.setup({
 			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
 			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
 			vim_item.menu = ({
+                codeium = "AI",
 				nvim_lsp = "LSP",
 				luasnip = "Snippet",
 				buffer = "Buffer",
 				path = "Path",
-                codeium = "AI",
 			})[entry.source.name]
 			return vim_item
 		end,
 	},
 	sources = {
+        { name = "codeium"},
 		{ name = "nvim_lsp" },
 		{ name = "luasnip" },
 		{ name = "buffer" },
 		{ name = "path" },
-        { name = "codeium"},
 	},
 	confirm_opts = {
 		behavior = cmp.ConfirmBehavior.Replace,
