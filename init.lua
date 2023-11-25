@@ -419,6 +419,10 @@ require("lazy").setup({
         config = function ()
             require("inc_rename").setup()
         end,
+    },{
+        "navarasu/onedark.nvim"
+    },{
+        "CantaroMC/ayu-nvim",
     }
 })
 
@@ -544,7 +548,9 @@ require("hover").setup {
         -- Mouse support
         vim.keymap.set('n', '<MouseMove>', require('hover').hover_mouse, { desc = "hover.nvim (mouse)" })
         vim.o.mousemoveevent = true
-
+require("onedark").setup{
+    style = "warmer"
+}
 
 require("barbecue").setup({
 	theme = {
@@ -625,15 +631,22 @@ local function surfer()
 end
 require("lualine").setup({
 	options = {
-		-- section_separators = { left = '', right = '' },
-		-- component_separators = { left = '', right = '' },
-		theme = "ayu_mirage",
+        section_separators = { left = '', right = '' },
+		component_separators = "|",
+		theme = "nightfly",
+        globalstatus = true,
+       --separator = { left = '', right = '' }, right_padding = 2 
 	},
 	sections = {
-		lualine_c = { "filename" },
+        lualine_a = {
+          { 'mode', separator = { left = '', right = '' }, right_padding = 2 },
+    },
+		lualine_c = { "filename"},
 		lualine_x = { lspinfo_component, surfer, "filetype" },
+        lualine_z = {
+                      { 'location', separator = {left = '', right = '' }, left_padding = 2 },
 	},
-})
+}})
 require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
 --which-key
 require("which-key").setup({
@@ -684,6 +697,25 @@ vim.cmd([[
     autocmd TermOpen * call settabvar(1, 'toggleterm_directory', expand('%:p:h'))
   augroup END
 ]])
+
+-- Inform nvim how to enable undercurl
+vim.cmd[[
+    let &t_Cs = "\e[4:3m"
+    let &t_Ce = "\e[4:0m"
+
+hi SpellBad guisp=red gui=undercurl term=underline cterm=undercurl    
+hi SpellCap guisp=yellow gui=undercurl term=underline cterm=undercurl    
+hi SpellRare guisp=blue gui=undercurl term=underline cterm=undercurl
+hi SpellLocal guisp=orange gui=undercurl term=underline cterm=undercurl    
+
+set spell
+]]
+
+require("notify").setup({
+  background_colour = "#b2beb5",
+})
+vim.g.ayu_avoid_italics = true
+
 require("noice").setup({
 	lsp = {
 		-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
@@ -720,7 +752,7 @@ vim.api.nvim_set_keymap("n", "<leader>cl", ":LspInfo<cr>", { desc = "Lsp Info" }
 vim.api.nvim_set_keymap("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
 vim.api.nvim_set_keymap("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 vim.keymap.set("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
-vim.keymap.set("n", "<leader>ih", ":lua vim.lsp.inlay_hint(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
+vim.keymap.set("n", "<leader>ih", ":lua vim.lsp.inlay_hint.enable(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
 vim.keymap.set("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
 vim.keymap.set("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
 vim.api.nvim_set_keymap("n", "<leader>k", ":lua vim.lsp.buf.definition()<CR>", { desc = "Show definition" })
@@ -746,6 +778,8 @@ function()
     return ":IncRename " .. vim.fn.expand("<cword>")
 end,
     {desc = "Lsp Rename", silent = true, expr = true})
+vim.keymap.set("n", "<leader>nf", ":Neotree position=float<CR>", {desc = "Floating file view", silent = true})
+vim.keymap.set("n", "<leader>nc", ":Neotree position=current<CR>", {desc = "Huge file view", silent = true})
 -- Define the key mappings
 vim.api.nvim_set_keymap("n", "<A-1>", ":ToggleTerm direction=horizontal size=20<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<A-2>", ":ToggleTerm direction=vertical size=60<CR>", { noremap = true, silent = true })
@@ -818,7 +852,7 @@ vim.keymap.set("n", "<BS>", "dh")
 vim.cmd([[let g:auto_save = 1]])
 vim.cmd([[let g:auto_save_silent = 1]])
 require("catppuccin").setup({ flavour = "macchiato" })
-vim.cmd([[colorscheme kanagawa]])
+vim.cmd([[colorscheme ayu]])
 require("bufferline").setup({
 	options = {
 		offsets = {
@@ -1017,7 +1051,7 @@ cmp.setup({
 		format = function(entry, vim_item)
 			-- Kind icons
 			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
 			vim_item.menu = ({
                 codeium = "AI",
 				nvim_lsp = "LSP",
