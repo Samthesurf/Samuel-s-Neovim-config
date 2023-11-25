@@ -714,7 +714,7 @@ set spell
 require("notify").setup({
   background_colour = "#b2beb5",
 })
-vim.g.ayu_avoid_italics = true
+-- vim.g.ayu_avoid_italics = true
 
 require("noice").setup({
 	lsp = {
@@ -789,12 +789,15 @@ vim.api.nvim_set_keymap("n", "<C-s>", ":w<CR>", { noremap = true, silent = true 
 vim.api.nvim_set_keymap("n", "<leader>qa", ":qall<CR>", { desc = "Close Neovim" })
 vim.api.nvim_set_keymap("n", "<leader>of", ":FzfLua oldfiles<CR>", { desc = "Recent Files" })
 vim.api.nvim_set_keymap("n", "<leader>fz", ":cd ~<CR>:FZF<CR>", { desc = "fzf" })
+vim.api.nvim_set_keymap("n", "<leader>ff", ":FzfLua files<CR>", { desc = "search current dir" })
 vim.api.nvim_set_keymap("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
 vim.api.nvim_set_keymap("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
 vim.api.nvim_set_keymap("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
 vim.api.nvim_set_keymap("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
 vim.api.nvim_set_keymap("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
 vim.api.nvim_set_keymap("n", "<leader>fl", ":FzfLua<CR>", {desc = "fzf lua", silent = true})
+vim.keymap.set("n","<leader>ed", ":Neotree document_symbols right<CR>", {desc = "document symbols", silent = true})
+vim.keymap.set("n","<leader>fc", ":FzfLua colorschemes<CR>",{desc = "colorschemes", silent = true})
 --Running code lol
 -- NOTE: If clangd or clang doesn't work as intended, do the following
 -- 1) for Linux: clang -v, check the location of GCC it's checking to run, then do sudo apt install libstdc++-12-dev if the gcc version is 12 or 13 if the version is 13
@@ -826,6 +829,7 @@ augroup END
 require("neo-tree").setup({
 	enable_git_status = true,
 	enable_diagnostics = true,
+    sources = {"filesystem","buffers","git_status","document_symbols"},
 	buffers = {
 		follow_current_file = {
 			enabled = true,
@@ -838,16 +842,13 @@ require("neo-tree").setup({
 			hide_hidden = false,
 		},
 	},
-	config = {
-		sources = {
-			"document_symbols",
-		},
-	},
+    symbols ={
+        follow_cursor = true,
+    },
 })
-
 vim.keymap.set("n", "S", function()
-	require("flash").treesitter()
-end, { desc = "Flash Treesitter" })
+    require("flash").treesitter()
+    end, { desc = "Flash Treesitter" })
 vim.keymap.set("n", "<BS>", "dh")
 vim.cmd([[let g:auto_save = 1]])
 vim.cmd([[let g:auto_save_silent = 1]])
@@ -938,6 +939,11 @@ vim.api.nvim_set_keymap(
 	{ desc = "file explorer", noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
+	"n",
+	"\\",
+	":Neotree right<CR>",
+	{ desc = "file explorer 1", noremap = true, silent = true }
+)vim.api.nvim_set_keymap(
 	"n",
 	"<leader>eg",
 	":Neotree git_status toggle<CR>",
