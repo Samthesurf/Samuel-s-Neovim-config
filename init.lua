@@ -25,9 +25,9 @@ vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", {silent = true})
 vim.api.nvim_set_keymap("n", "dir", ":pwd<CR>", { noremap = true, silent = true })
 -- Change diagnostic signs.
-vim.fn.sign_define("DiagnosticSignError", { text = "❌", texthl = "DiagnosticSignError" })
+vim.fn.sign_define("DiagnosticSignError", { text = "❌️", texthl = "DiagnosticSignError" })
 vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = "ℹ️", texthl = "DiagnosticSignInfo" })
+vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
 -- vim.api.nvim_set_keymap('n','x','_x',{desc = "delete without yanking"})
 vim.o.completeopt = "menuone,noselect"
@@ -74,7 +74,7 @@ require("lazy").setup({
 	},
 	{
 		"williamboman/mason.nvim",
-	 	-- opts = function ()
+	 	opts = function ()
 			 ensure_installed = {
 				"pyright",
 				"ruff",
@@ -88,12 +88,12 @@ require("lazy").setup({
 				"emmet-language-server",
 				"vale",
 			}
-          -- return ensure_installed
-      ,
+          return ensure_installed
+      end,
         config = function(_,opts)
-            require("mason").setup(opts)
+            -- require("mason").setup(opts)
 		vim.api.nvim_create_user_command("MasonInstallAll", function()
-		vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
+		vim.cmd("MasonInstall " .. table.concat(ensure_installed, " "))
 		end, {})
     end,
 	},
@@ -212,9 +212,6 @@ require("lazy").setup({
 		"RRethy/vim-illuminate",
 	},
 	{
-		"junegunn/fzf",
-	},
-	{
 		"mfussenegger/nvim-dap",
 		keys = {
 			{
@@ -264,7 +261,7 @@ require("lazy").setup({
          dashboard.section.footer.val = vim.split(footer, "\n")
       -- stylua: ignore
       dashboard.section.buttons.val = {
-        dashboard.button("f", " " .. " Find file",       "<cmd> FZF <cr>"),
+        dashboard.button("f", " " .. " Find file",       [[<cmd> lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files <CR>]]),
         dashboard.button("n", " " .. " New file",        "<cmd> New<cr>"),
         dashboard.button("r", " " .. " Recent files",    "<cmd> Telescope oldfiles <cr>"),
         dashboard.button("g", " " .. " Find text",       "<cmd> Telescope live_grep <cr>"),
@@ -324,26 +321,26 @@ require("lazy").setup({
 			-- add any options here
 		},
 	},
-	{
-		"catppuccin/nvim",
-		name = "catppuccin",
-		priority = 1000,
-	},
     {
-		"petertriho/nvim-scrollbar",
-	},
-	{
-		-- "MunifTanjim/nui.nvim",
-	},
-	{
-		"rcarriga/nvim-notify",
-	},
-	{
-		"EdenEast/nightfox.nvim",
-	},
-	{
-		"marko-cerovac/material.nvim",
-		event = "VeryLazy",
+        "catppuccin/nvim",
+        name = "catppuccin",
+        priority = 1000,
+    },
+    {
+        "petertriho/nvim-scrollbar",
+    },
+    {
+        -- "MunifTanjim/nui.nvim",
+    },
+    {
+        "rcarriga/nvim-notify",
+    },
+    {
+        "EdenEast/nightfox.nvim",
+    },
+    {
+        "marko-cerovac/material.nvim",
+        event = "VeryLazy",
 	},
 	{
 		"rebelot/kanagawa.nvim",
@@ -423,6 +420,9 @@ require("lazy").setup({
         "navarasu/onedark.nvim"
     },{
         "CantaroMC/ayu-nvim",
+    },{
+        "nvim-telescope/telescope-file-browser.nvim",
+        dependencies = "nvim-telescope/telescope.nvim"
     }
 })
 
@@ -448,6 +448,31 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 require("telescope").setup({
+    defaults = {
+        prompt_prefix = "   ",
+        selection_caret = "  ",
+        entry_prefix = "  ",
+        sorting_strategy = "ascending",
+        layout_strategy = "horizontal",
+        layout_config = {
+              horizontal = {
+                prompt_position = "top",
+                preview_width = 0.55,
+                results_width = 0.8,
+              },
+              vertical = {
+                mirror = false,
+              },
+              width = 0.87,
+              height = 0.80,
+              preview_cutoff = 120,
+        },
+            color_devicons = true,
+        set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
+        file_sorter = require("telescope.sorters").get_fuzzy_file,
+        -- border = false
+    },
+    -- extensions_list = { "file_browser", "fzf", "undo" },
 	extensions = {
 		fzf = {
 			fuzzy = true, -- false will only do exact matching
@@ -456,10 +481,15 @@ require("telescope").setup({
 			case_mode = "smart_case", -- or "ignore_case" or "respect_case"
 			-- the default case_mode is "smart_case"
 		},
+        file_browser = {
+            -- display_stat = {date = false, size = false, mode = false},
+            -- select_buffer = true,
+        }
 	},
 })
 require("telescope").load_extension("undo")
 require("telescope").load_extension("fzf")
+require("telescope").load_extension("file_browser")
 require("mason").setup({
 	ui = {
 		icons = {
@@ -787,17 +817,18 @@ vim.api.nvim_set_keymap("n", "<A-3>", ":ToggleTerm direction=float<CR>", { norem
 vim.api.nvim_set_keymap("i", "<C-s>", "<Esc>:w<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>qa", ":qall<CR>", { desc = "Close Neovim" })
-vim.api.nvim_set_keymap("n", "<leader>of", ":FzfLua oldfiles<CR>", { desc = "Recent Files" })
-vim.api.nvim_set_keymap("n", "<leader>fz", ":cd ~<CR>:FZF<CR>", { desc = "fzf" })
-vim.api.nvim_set_keymap("n", "<leader>ff", ":FzfLua files<CR>", { desc = "search current dir" })
+vim.api.nvim_set_keymap("n", "<leader>of", [[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua oldfiles<CR>]], { desc = "Recent Files" })
+vim.api.nvim_set_keymap("n", "<leader>fz", [[<cmd>cd ~<CR>:lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files<CR>]], { desc = "fzf" })
+vim.api.nvim_set_keymap("n", "<leader>ff", [[<cmd>lua require('fzf-lua').setup({'default'})<CR>:FzfLua files<CR>]], { desc = "search current dir" })
 vim.api.nvim_set_keymap("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
 vim.api.nvim_set_keymap("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
 vim.api.nvim_set_keymap("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
 vim.api.nvim_set_keymap("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
 vim.api.nvim_set_keymap("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
-vim.api.nvim_set_keymap("n", "<leader>fl", ":FzfLua<CR>", {desc = "fzf lua", silent = true})
+vim.api.nvim_set_keymap("n", "<leader>fl",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>: FzfLua<CR>]], {desc = "fzf lua", silent = true})
 vim.keymap.set("n","<leader>ed", ":Neotree document_symbols right<CR>", {desc = "document symbols", silent = true})
-vim.keymap.set("n","<leader>fc", ":FzfLua colorschemes<CR>",{desc = "colorschemes", silent = true})
+vim.keymap.set("n","<leader>fc",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua colorschemes<CR>]],{desc = "colorschemes", silent = true})
+vim.keymap.set("n","<leader>tf",":Telescope file_browser<CR>", {desc = "File pick", silent = true})
 --Running code lol
 -- NOTE: If clangd or clang doesn't work as intended, do the following
 -- 1) for Linux: clang -v, check the location of GCC it's checking to run, then do sudo apt install libstdc++-12-dev if the gcc version is 12 or 13 if the version is 13
