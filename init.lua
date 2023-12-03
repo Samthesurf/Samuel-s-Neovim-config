@@ -751,7 +751,7 @@ require("notify").setup({
   background_colour = "#b2beb5",
 })
 -- vim.g.ayu_avoid_italics = true
-vim.g.ayu_mirage = true
+-- vim.g.ayu_mirage = true
 require("noice").setup({
 	lsp = {
 		-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
