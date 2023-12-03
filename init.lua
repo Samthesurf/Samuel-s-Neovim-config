@@ -419,10 +419,14 @@ require("lazy").setup({
     },{
         "navarasu/onedark.nvim"
     },{
-        "CantaroMC/ayu-nvim",
+        "CantoroMC/ayu-nvim",
     },{
         "nvim-telescope/telescope-file-browser.nvim",
         dependencies = "nvim-telescope/telescope.nvim"
+    },{
+        "arturgoms/moonbow.nvim"
+    },{
+        "nvim-pack/nvim-spectre",
     }
 })
 
@@ -472,7 +476,7 @@ require("telescope").setup({
         file_sorter = require("telescope.sorters").get_fuzzy_file,
         -- border = false
     },
-    -- extensions_list = { "file_browser", "fzf", "undo" },
+    -- extensions_list = { "file_browser", "fzf", "undo" , "themes"},
 	extensions = {
 		fzf = {
 			fuzzy = true, -- false will only do exact matching
@@ -483,6 +487,7 @@ require("telescope").setup({
 		},
         file_browser = {
             -- display_stat = {date = false, size = false, mode = false},
+            -- theme - "ivy",
             -- select_buffer = true,
         }
 	},
@@ -490,6 +495,7 @@ require("telescope").setup({
 require("telescope").load_extension("undo")
 require("telescope").load_extension("fzf")
 require("telescope").load_extension("file_browser")
+-- require("telescope.themes").setup{}
 require("mason").setup({
 	ui = {
 		icons = {
@@ -663,7 +669,7 @@ require("lualine").setup({
 	options = {
         section_separators = { left = '', right = '' },
 		component_separators = "|",
-		theme = "nightfly",
+		theme = "moonbow",
         globalstatus = true,
        --separator = { left = '', right = '' }, right_padding = 2 
 	},
@@ -745,7 +751,7 @@ require("notify").setup({
   background_colour = "#b2beb5",
 })
 -- vim.g.ayu_avoid_italics = true
-
+-- vim.g.ayu_mirage = true
 require("noice").setup({
 	lsp = {
 		-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
@@ -781,7 +787,7 @@ vim.keymap.set("n", "<C-m>", ":Mason<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>cl", ":LspInfo<cr>", { desc = "Lsp Info" })
 vim.api.nvim_set_keymap("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
 vim.api.nvim_set_keymap("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
-vim.keymap.set("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
+-- vim.keymap.set("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
 vim.keymap.set("n", "<leader>ih", ":lua vim.lsp.inlay_hint.enable(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
 vim.keymap.set("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
 vim.keymap.set("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
@@ -829,6 +835,15 @@ vim.api.nvim_set_keymap("n", "<leader>fl",[[<cmd>lua require("fzf-lua").setup({'
 vim.keymap.set("n","<leader>ed", ":Neotree document_symbols right<CR>", {desc = "document symbols", silent = true})
 vim.keymap.set("n","<leader>fc",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua colorschemes<CR>]],{desc = "colorschemes", silent = true})
 vim.keymap.set("n","<leader>tf",":Telescope file_browser<CR>", {desc = "File pick", silent = true})
+vim.keymap.set('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+    desc = "Search current word"
+})
+vim.keymap.set('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
+    desc = "Search current word"
+})
+vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+    desc = "Search on current file"
+})
 --Running code lol
 -- NOTE: If clangd or clang doesn't work as intended, do the following
 -- 1) for Linux: clang -v, check the location of GCC it's checking to run, then do sudo apt install libstdc++-12-dev if the gcc version is 12 or 13 if the version is 13
