@@ -1,39 +1,41 @@
+local opt = vim.opt
+local keyset = vim.keymap.set
 vim.o.mouse = "a"
-vim.opt.number = true
-vim.opt.relativenumber = true
+opt.number = true
+opt.relativenumber = true
 vim.o.splitbelow = true
 vim.o.splitright = true
 vim.o.incsearch = true
-vim.opt.hlsearch = true
-vim.opt.ignorecase = true
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.smartindent = true
-vim.opt.expandtab = true
-vim.opt.termguicolors = true
-vim.opt.guifont = "JetBrainsMono Nerd Font:h10:b"
+opt.hlsearch = true
+opt.ignorecase = true
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 4
+opt.smartindent = true
+opt.expandtab = true
+opt.termguicolors = true
+opt.guifont = "JetBrainsMono Nerd Font:h10:b"
 if vim.g.neovide then
-	vim.opt.guifont = "JetBrainsMono Nerd Font:h10:b"
+	opt.guifont = "JetBrainsMono Nerd Font:h10:b"
 	vim.g.neovide_transparency = 0.95
 	vim.g.neovide_background_color = "#1f528f"
 end
 -- on save current directory for the buffer becomes the directory for Neovim
 vim.cmd([[au BufWritePre * cd %:p:h]])
 vim.api.nvim_set_var("mapleader", " ")
-vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", {silent = true})
-vim.api.nvim_set_keymap("n", "dir", ":pwd<CR>", { noremap = true, silent = true })
+keyset("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
+keyset("n", "<Esc>", ":noh<CR>", {silent = true})
+keyset("n", "dir", ":pwd<CR>", { noremap = true, silent = true })
 -- Change diagnostic signs.
 vim.fn.sign_define("DiagnosticSignError", { text = "❌️", texthl = "DiagnosticSignError" })
 vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
--- vim.api.nvim_set_keymap('n','x','_x',{desc = "delete without yanking"})
+-- keyset('n','x','_x',{desc = "delete without yanking"})
 vim.o.completeopt = "menuone,noselect"
-vim.opt.cursorline = true
-vim.opt.smartcase = true
-vim.opt.clipboard:append("unnamedplus")
+opt.cursorline = true
+opt.smartcase = true
+opt.clipboard:append("unnamedplus")
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -46,7 +48,7 @@ if not vim.loop.fs_stat(lazypath) then
 		lazypath,
 	})
 end
-vim.opt.rtp:prepend(lazypath)
+opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	{
@@ -87,6 +89,7 @@ require("lazy").setup({
 				"html-lsp",
 				"emmet-language-server",
 				"vale",
+                "codelldb",
 			}
           return ensure_installed
       end,
@@ -263,6 +266,7 @@ require("lazy").setup({
       dashboard.section.buttons.val = {
         dashboard.button("f", " " .. " Find file",       [[<cmd> lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files <CR>]]),
         dashboard.button("n", " " .. " New file",        "<cmd> New<cr>"),
+        dashboard.button("b", " " .. " Folder browser",  "<cmd> Telescope file_browser<cr>"),
         dashboard.button("r", " " .. " Recent files",    "<cmd> Telescope oldfiles <cr>"),
         dashboard.button("g", " " .. " Find text",       "<cmd> Telescope live_grep <cr>"),
         dashboard.button("c", " " .. " Config",          "<cmd> e $MYVIMRC <cr>"),
@@ -426,12 +430,15 @@ require("lazy").setup({
     },{
         "arturgoms/moonbow.nvim"
     },{
-        "nvim-pack/nvim-spectre",
+        -- "nvim-pack/nvim-spectre",
+    },{
+        "fynnfluegge/monet.nvim",
+        name = "monet"
     }
 })
 
--- vim.keymap.set('n', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
--- vim.keymap.set('i', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
+-- keyset('n', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
+-- keyset('i', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
 require("nvim-treesitter.configs").setup({
 	auto_install = true,
 	highlight = { enable = true },
@@ -578,14 +585,15 @@ require("hover").setup {
         }
 
         -- Setup keymaps
-        -- vim.keymap.set("n", "K", require("hover").hover, {desc = "hover.nvim"})
-        vim.keymap.set("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
+        -- keyset("n", "K", require("hover").hover, {desc = "hover.nvim"})
+        keyset("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
 
         -- Mouse support
-        vim.keymap.set('n', '<MouseMove>', require('hover').hover_mouse, { desc = "hover.nvim (mouse)" })
+        keyset('n', '<MouseMove>', require('hover').hover_mouse, { desc = "hover.nvim (mouse)" })
         vim.o.mousemoveevent = true
 require("onedark").setup{
-    style = "warmer"
+    style = "warmer",
+    transparent = true,
 }
 
 require("barbecue").setup({
@@ -709,7 +717,7 @@ null_ls.setup({
 		-- null_ls.builtins.diagnostics.mypy,
 	},
 })
-vim.g.transparent_enabled = true
+vim.g.transparent_enabled = false
 -- require("conform").setup({
 -- 	formatters_by_ft = {
 -- 		lua = { "stylua" },
@@ -770,78 +778,78 @@ require("noice").setup({
 		lsp_doc_border = false, -- add a border to hover docs and signature help
 	},
 })
-vim.keymap.set(
+keyset(
 	"n",
 	"<leader>/",
 	"<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
 	{ desc = "Comment line" }
 )
-vim.keymap.set(
+keyset(
 	"x",
 	"<leader>/",
 	"<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
 	{ desc = "Comment line" }
 )
-vim.api.nvim_set_keymap("n", "<leader>ft", ":Telescope live_grep<CR>", { noremap = true })
-vim.keymap.set("n", "<C-m>", ":Mason<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>cl", ":LspInfo<cr>", { desc = "Lsp Info" })
-vim.api.nvim_set_keymap("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
-vim.api.nvim_set_keymap("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
--- vim.keymap.set("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
-vim.keymap.set("n", "<leader>ih", ":lua vim.lsp.inlay_hint.enable(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
-vim.keymap.set("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
-vim.keymap.set("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
-vim.api.nvim_set_keymap("n", "<leader>k", ":lua vim.lsp.buf.definition()<CR>", { desc = "Show definition" })
-vim.keymap.set("n", "<leader>ca", ":lua vim.lsp.buf.code_action()<CR>", { desc = "Code actions" })
-vim.keymap.set("n", ":Q", ":q", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>fd", ":lua vim.lsp.buf.format{timeout_ms = 12000}<CR>", { desc = "Format" })
-vim.api.nvim_set_keymap("n", "p", "P", { noremap = true })
-vim.api.nvim_set_keymap("n", "yy", "0y$", { noremap = true })
-vim.api.nvim_set_keymap("n", "<leader>a", "gg0vG$", { desc = "highlight entire document" })
-vim.api.nvim_set_keymap("n", "<leader>vs", ":VimGameSnake<CR>", { desc = "Play Vim Snake" })
-vim.api.nvim_set_keymap("n", "<leader>ss", ":echo g:VimSnakeScore<CR>", { desc = "See Snake score" })
-vim.keymap.set("n", "<leader>ga", ":G add .<CR>", { desc = "git add your changes", silent = true })
-vim.keymap.set("n", "<leader>gc", ":G commit<CR>:starti<CR>", { desc = "add a commit message" })
-vim.keymap.set("n", "<leader>gp", ":G push<CR>", { desc = "Push changes to Github" })
-vim.keymap.set("n", "<C-Left>", "<C-w>>", { desc = "Increasing width" })
-vim.keymap.set("n", "<C-Right>", "<C-w><", { desc = "Decreasing width" })
-vim.keymap.set("n", "<C-Up>", "<C-w>+", { desc = "Increasing height" })
-vim.keymap.set("n", "<C-Down>", "<C-w>-", { desc = "Decreasing height" })
-vim.keymap.set("n", "<leader>tb", ":Telescope buffers<CR>", { desc = "open buffers", silent = true })
-vim.keymap.set("n", "<leader>te", ":terminal<CR>starti<CR>", { desc = "open Terminal", silent = true })
-vim.keymap.set("n", "<leader>rn",
+keyset("n", "<leader>ft", ":Telescope live_grep<CR>", { noremap = true })
+keyset("n", "<C-m>", ":Mason<CR>", { noremap = true })
+keyset("n", "<leader>cl", ":LspInfo<cr>", { desc = "Lsp Info" })
+keyset("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
+keyset("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+-- keyset("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
+keyset("n", "<leader>ih", ":lua vim.lsp.inlay_hint.enable(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
+keyset("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
+keyset("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
+keyset("n", "<leader>k", ":lua vim.lsp.buf.definition()<CR>", { desc = "Show definition" })
+keyset("n", "<leader>ca", ":lua vim.lsp.buf.code_action()<CR>", { desc = "Code actions" })
+keyset("n", ":Q", ":q", { noremap = true })
+keyset("n", "<leader>fd", ":lua vim.lsp.buf.format{timeout_ms = 12000}<CR>", { desc = "Format" })
+keyset("n", "p", "P", { noremap = true })
+keyset("n", "yy", "0y$", { noremap = true })
+keyset("n", "<leader>a", "gg0vG$", { desc = "highlight entire document" })
+keyset("n", "<leader>vs", ":VimGameSnake<CR>", { desc = "Play Vim Snake" })
+keyset("n", "<leader>ss", ":echo g:VimSnakeScore<CR>", { desc = "See Snake score" })
+keyset("n", "<leader>ga", ":G add .<CR>", { desc = "git add your changes", silent = true })
+keyset("n", "<leader>gc", ":G commit<CR>:starti<CR>", { desc = "add a commit message" })
+keyset("n", "<leader>gp", ":G push<CR>", { desc = "Push changes to Github" })
+keyset("n", "<C-Left>", "<C-w>>", { desc = "Increasing width" })
+keyset("n", "<C-Right>", "<C-w><", { desc = "Decreasing width" })
+keyset("n", "<C-Up>", "<C-w>+", { desc = "Increasing height" })
+keyset("n", "<C-Down>", "<C-w>-", { desc = "Decreasing height" })
+keyset("n", "<leader>tb", ":Telescope buffers<CR>", { desc = "open buffers", silent = true })
+keyset("n", "<leader>te", ":terminal<CR>starti<CR>", { desc = "open Terminal", silent = true })
+keyset("n", "<leader>rn",
 function()
     return ":IncRename " .. vim.fn.expand("<cword>")
 end,
     {desc = "Lsp Rename", silent = true, expr = true})
-vim.keymap.set("n", "<leader>nf", ":Neotree position=float<CR>", {desc = "Floating file view", silent = true})
-vim.keymap.set("n", "<leader>nc", ":Neotree position=current<CR>", {desc = "Huge file view", silent = true})
+keyset("n", "<leader>nf", ":Neotree position=float<CR>", {desc = "Floating file view", silent = true})
+keyset("n", "<leader>nc", ":Neotree position=current<CR>", {desc = "Huge file view", silent = true})
 -- Define the key mappings
-vim.api.nvim_set_keymap("n", "<A-1>", ":ToggleTerm direction=horizontal size=20<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<A-2>", ":ToggleTerm direction=vertical size=60<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<A-3>", ":ToggleTerm direction=float<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("i", "<C-s>", "<Esc>:w<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>qa", ":qall<CR>", { desc = "Close Neovim" })
-vim.api.nvim_set_keymap("n", "<leader>of", [[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua oldfiles<CR>]], { desc = "Recent Files" })
-vim.api.nvim_set_keymap("n", "<leader>fz", [[<cmd>cd ~<CR>:lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files<CR>]], { desc = "fzf" })
-vim.api.nvim_set_keymap("n", "<leader>ff", [[<cmd>lua require('fzf-lua').setup({'default'})<CR>:FzfLua files<CR>]], { desc = "search current dir" })
-vim.api.nvim_set_keymap("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
-vim.api.nvim_set_keymap("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
-vim.api.nvim_set_keymap("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
-vim.api.nvim_set_keymap("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
-vim.api.nvim_set_keymap("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
-vim.api.nvim_set_keymap("n", "<leader>fl",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>: FzfLua<CR>]], {desc = "fzf lua", silent = true})
-vim.keymap.set("n","<leader>ed", ":Neotree document_symbols right<CR>", {desc = "document symbols", silent = true})
-vim.keymap.set("n","<leader>fc",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua colorschemes<CR>]],{desc = "colorschemes", silent = true})
-vim.keymap.set("n","<leader>tf",":Telescope file_browser<CR>", {desc = "File pick", silent = true})
-vim.keymap.set('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+keyset("n", "<A-1>", ":ToggleTerm direction=horizontal size=20<CR>", { noremap = true, silent = true })
+keyset("n", "<A-2>", ":ToggleTerm direction=vertical size=60<CR>", { noremap = true, silent = true })
+keyset("n", "<A-3>", ":ToggleTerm direction=float<CR>", { noremap = true, silent = true })
+keyset("i", "<C-s>", "<Esc>:w<CR>", { noremap = true, silent = true })
+keyset("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
+keyset("n", "<leader>qa", ":qall<CR>", { desc = "Close Neovim" })
+keyset("n", "<leader>of", [[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua oldfiles<CR>]], { desc = "Recent Files" })
+keyset("n", "<leader>fz", [[<cmd>cd ~<CR>:lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files<CR>]], { desc = "fzf" })
+keyset("n", "<leader>ff", [[<cmd>lua require('fzf-lua').setup({'default'})<CR>:FzfLua files<CR>]], { desc = "search current dir" })
+keyset("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
+keyset("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
+keyset("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
+keyset("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
+keyset("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
+keyset("n", "<leader>fl",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>: FzfLua<CR>]], {desc = "fzf lua", silent = true})
+keyset("n","<leader>ed", ":Neotree document_symbols right<CR>", {desc = "document symbols", silent = true})
+keyset("n","<leader>fc",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua colorschemes<CR>]],{desc = "colorschemes", silent = true})
+keyset("n","<leader>tf",":Telescope file_browser<CR>", {desc = "File pick", silent = true})
+keyset('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
     desc = "Search current word"
 })
-vim.keymap.set('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
+keyset('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
     desc = "Search current word"
 })
-vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+keyset('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
     desc = "Search on current file"
 })
 --Running code lol
@@ -892,14 +900,21 @@ require("neo-tree").setup({
         follow_cursor = true,
     },
 })
-vim.keymap.set("n", "S", function()
+require("kanagawa").setup({
+    transparent = true,
+    -- terminalColors = false,
+})
+require("monet").setup({
+    transparent_background = true,
+})
+keyset("n", "S", function()
     require("flash").treesitter()
     end, { desc = "Flash Treesitter" })
-vim.keymap.set("n", "<BS>", "dh")
+keyset("n", "<BS>", "dh")
 vim.cmd([[let g:auto_save = 1]])
 vim.cmd([[let g:auto_save_silent = 1]])
 require("catppuccin").setup({ flavour = "macchiato" })
-vim.cmd([[colorscheme ayu]])
+vim.cmd([[colorscheme monet]])
 require("bufferline").setup({
 	options = {
 		offsets = {
@@ -978,28 +993,28 @@ require("lspconfig").gopls.setup({
 	filetypes = { "go" },
 })
 
-vim.api.nvim_set_keymap(
+keyset(
 	"n",
 	"<leader>e",
 	":Neotree filesystem reveal right toggle<CR>",
 	{ desc = "file explorer", noremap = true, silent = true }
 )
-vim.api.nvim_set_keymap(
+keyset(
 	"n",
 	"\\",
 	":Neotree right<CR>",
 	{ desc = "file explorer 1", noremap = true, silent = true }
-)vim.api.nvim_set_keymap(
+)keyset(
 	"n",
 	"<leader>eg",
 	":Neotree git_status toggle<CR>",
 	{ desc = "file git status", noremap = true, silent = true }
 )
-vim.keymap.set("n", "i", "a")
+keyset("n", "i", "a")
 -- <A means alt
-vim.api.nvim_set_keymap("n", "<A-r>", ":RunCode<CR>:starti<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
-vim.keymap.set("n","<leader>n",":New<CR>", {desc = "Create new file", silent = true})
+keyset("n", "<A-r>", ":RunCode<CR>:starti<CR>", { noremap = true, silent = true })
+keyset("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
+keyset("n","<leader>n",":New<CR>", {desc = "Create new file", silent = true})
 
 --nvim-cmp
 local cmp_status_ok, cmp = pcall(require, "cmp")
@@ -1154,27 +1169,27 @@ cmp.setup.cmdline("/", {
 		{ name = "buffer" },
 	},
 })
-vim.keymap.set("n", "<leader>tt", function()
+keyset("n", "<leader>tt", function()
 	require("trouble").open()
 end, { desc = "Trouble" })
-vim.keymap.set("n", "<leader>tw", function()
+keyset("n", "<leader>tw", function()
 	require("trouble").open("workspace_diagnostics")
 end, { desc = "workspace trouble" })
-vim.keymap.set("n", "<leader>td", function()
+keyset("n", "<leader>td", function()
 	require("trouble").open("document_diagnostics")
 end, { desc = "document trouble" })
-vim.keymap.set("n", "<leader>tq", function()
+keyset("n", "<leader>tq", function()
 	require("trouble").open("quickfix")
 end, { desc = "quickfix" })
-vim.keymap.set("n", "<leader>tl", function()
+keyset("n", "<leader>tl", function()
 	require("trouble").open("loclist")
 end, { desc = "loclist" })
-vim.keymap.set("n", "gR", function()
+keyset("n", "gR", function()
 	require("trouble").open("lsp_references")
 end, { desc = "references" })
 
 -- restore the session for the current directory
-vim.api.nvim_set_keymap(
+keyset(
 	"n",
 	"<leader>ps",
 	[[<cmd>lua require("persistence").load()<cr>]],
@@ -1182,7 +1197,7 @@ vim.api.nvim_set_keymap(
 )
 
 -- restore the last session
-vim.api.nvim_set_keymap(
+keyset(
 	"n",
 	"<leader>pl",
 	[[<cmd>lua require("persistence").load({ last = true })<cr>]],
@@ -1190,7 +1205,7 @@ vim.api.nvim_set_keymap(
 )
 
 -- stop Persistence => session won't be saved on exit
-vim.api.nvim_set_keymap(
+keyset(
 	"n",
 	"<leader>qd",
 	[[<cmd>lua require("persistence").stop()<cr>]],
