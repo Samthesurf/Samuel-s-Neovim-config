@@ -1,5 +1,5 @@
 local opt = vim.opt
-local keyset = vim.keymap.set
+local map = vim.keymap.set
 vim.o.mouse = "a"
 opt.number = true
 opt.relativenumber = true
@@ -16,22 +16,22 @@ opt.expandtab = true
 opt.termguicolors = true
 opt.guifont = "JetBrainsMono Nerd Font:h10:b"
 if vim.g.neovide then
-	opt.guifont = "JetBrainsMono Nerd Font:h10:b"
-	vim.g.neovide_transparency = 0.95
+	opt.guifont = "JetBrainsMono Nerd Font:h11:b"
+	vim.g.neovide_transparency = 0.65
 	vim.g.neovide_background_color = "#1f528f"
 end
 -- on save current directory for the buffer becomes the directory for Neovim
 vim.cmd([[au BufWritePre * cd %:p:h]])
 vim.api.nvim_set_var("mapleader", " ")
-keyset("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
-keyset("n", "<Esc>", ":noh<CR>", {silent = true})
-keyset("n", "dir", ":pwd<CR>", { noremap = true, silent = true })
+map("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
+map("n", "<Esc>", ":noh<CR>", {silent = true})
+map("n", "dir", ":pwd<CR>", { noremap = true, silent = true })
 -- Change diagnostic signs.
 vim.fn.sign_define("DiagnosticSignError", { text = "❌️", texthl = "DiagnosticSignError" })
 vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
--- keyset('n','x','_x',{desc = "delete without yanking"})
+-- map('n','x','_x',{desc = "delete without yanking"})
 vim.o.completeopt = "menuone,noselect"
 opt.cursorline = true
 opt.smartcase = true
@@ -437,8 +437,8 @@ require("lazy").setup({
     }
 })
 
--- keyset('n', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
--- keyset('i', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
+-- map('n', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
+-- map('i', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
 require("nvim-treesitter.configs").setup({
 	auto_install = true,
 	highlight = { enable = true },
@@ -585,16 +585,25 @@ require("hover").setup {
         }
 
         -- Setup keymaps
-        -- keyset("n", "K", require("hover").hover, {desc = "hover.nvim"})
-        keyset("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
+        -- map("n", "K", require("hover").hover, {desc = "hover.nvim"})
+        map("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
 
         -- Mouse support
-        keyset('n', '<MouseMove>', require('hover').hover_mouse, { desc = "hover.nvim (mouse)" })
+        map('n', '<MouseMove>', require('hover').hover_mouse, { desc = "hover.nvim (mouse)" })
         vim.o.mousemoveevent = true
 require("onedark").setup{
     style = "warmer",
     transparent = true,
 }
+
+require("fzf-lua").setup({
+    lsp ={
+        code_actions = {
+            previewer = 'codeaction_native',
+            preview_pager = "delta --side-by-side -- width=$FZF_PREVIEW_COLUMNS --hunk-header-style='omit' --file-style='omit'",
+        },
+    },
+})
 
 require("barbecue").setup({
 	theme = {
@@ -778,80 +787,90 @@ require("noice").setup({
 		lsp_doc_border = false, -- add a border to hover docs and signature help
 	},
 })
-keyset(
+map(
 	"n",
 	"<leader>/",
 	"<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
 	{ desc = "Comment line" }
 )
-keyset(
+map(
 	"x",
 	"<leader>/",
 	"<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
 	{ desc = "Comment line" }
 )
-keyset("n", "<leader>ft", ":Telescope live_grep<CR>", { noremap = true })
-keyset("n", "<C-m>", ":Mason<CR>", { noremap = true })
-keyset("n", "<leader>cl", ":LspInfo<cr>", { desc = "Lsp Info" })
-keyset("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
-keyset("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
--- keyset("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
-keyset("n", "<leader>ih", ":lua vim.lsp.inlay_hint.enable(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
-keyset("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
-keyset("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
-keyset("n", "<leader>k", ":lua vim.lsp.buf.definition()<CR>", { desc = "Show definition" })
-keyset("n", "<leader>ca", ":lua vim.lsp.buf.code_action()<CR>", { desc = "Code actions" })
-keyset("n", ":Q", ":q", { noremap = true })
-keyset("n", "<leader>fd", ":lua vim.lsp.buf.format{timeout_ms = 12000}<CR>", { desc = "Format" })
-keyset("n", "p", "P", { noremap = true })
-keyset("n", "yy", "0y$", { noremap = true })
-keyset("n", "<leader>a", "gg0vG$", { desc = "highlight entire document" })
-keyset("n", "<leader>vs", ":VimGameSnake<CR>", { desc = "Play Vim Snake" })
-keyset("n", "<leader>ss", ":echo g:VimSnakeScore<CR>", { desc = "See Snake score" })
-keyset("n", "<leader>ga", ":G add .<CR>", { desc = "git add your changes", silent = true })
-keyset("n", "<leader>gc", ":G commit<CR>:starti<CR>", { desc = "add a commit message" })
-keyset("n", "<leader>gp", ":G push<CR>", { desc = "Push changes to Github" })
-keyset("n", "<C-Left>", "<C-w>>", { desc = "Increasing width" })
-keyset("n", "<C-Right>", "<C-w><", { desc = "Decreasing width" })
-keyset("n", "<C-Up>", "<C-w>+", { desc = "Increasing height" })
-keyset("n", "<C-Down>", "<C-w>-", { desc = "Decreasing height" })
-keyset("n", "<leader>tb", ":Telescope buffers<CR>", { desc = "open buffers", silent = true })
-keyset("n", "<leader>te", ":terminal<CR>starti<CR>", { desc = "open Terminal", silent = true })
-keyset("n", "<leader>rn",
+map("n", "<leader>ft", ":Telescope live_grep<CR>", { noremap = true })
+map("n", "<C-m>", ":Mason<CR>", { noremap = true })
+map("n", "<leader>cl", ":LspInfo<cr>", { desc = "Lsp Info" })
+map("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
+map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+-- map("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
+map("n", "<leader>ih", ":lua vim.lsp.inlay_hint.enable(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
+map("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
+map("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
+map("n", "<leader>k", ":lua vim.lsp.buf.definition()<CR>", { desc = "Show definition" })
+map("n", ":Q", ":q", { noremap = true })
+map("n", "<leader>fd", ":lua vim.lsp.buf.format{timeout_ms = 12000}<CR>", { desc = "Format" })
+map("n", "p", "P", { noremap = true })
+map("n", "yy", "0y$", { noremap = true })
+map("n", "<leader>a", "gg0vG$", { desc = "highlight entire document" })
+map("n", "<leader>vs", ":VimGameSnake<CR>", { desc = "Play Vim Snake" })
+map("n", "<leader>ss", ":echo g:VimSnakeScore<CR>", { desc = "See Snake score" })
+map("n", "<leader>ga", ":G add .<CR>", { desc = "git add your changes", silent = true })
+map("n", "<leader>gc", ":G commit<CR>", { desc = "add a commit message" })
+map("n", "<leader>gp", ":G push<CR>", { desc = "Push changes to Github" })
+map("n", "<C-Left>", "<C-w>>", { desc = "Increasing width" })
+map("n", "<C-Right>", "<C-w><", { desc = "Decreasing width" })
+map("n", "<C-Up>", "<C-w>+", { desc = "Increasing height" })
+map("n", "<C-Down>", "<C-w>-", { desc = "Decreasing height" })
+map("n", "<leader>tb", ":Telescope buffers<CR>", { desc = "open buffers", silent = true })
+map("n", "<leader>te", ":terminal<CR>starti<CR>", { desc = "open Terminal", silent = true })
+map("n", "<leader>rn",
 function()
     return ":IncRename " .. vim.fn.expand("<cword>")
 end,
     {desc = "Lsp Rename", silent = true, expr = true})
-keyset("n", "<leader>nf", ":Neotree position=float<CR>", {desc = "Floating file view", silent = true})
-keyset("n", "<leader>nc", ":Neotree position=current<CR>", {desc = "Huge file view", silent = true})
+map("n", "<leader>nf", ":Neotree position=float<CR>", {desc = "Floating file view", silent = true})
+map("n", "<leader>nc", ":Neotree position=current<CR>", {desc = "Huge file view", silent = true})
 -- Define the key mappings
-keyset("n", "<A-1>", ":ToggleTerm direction=horizontal size=20<CR>", { noremap = true, silent = true })
-keyset("n", "<A-2>", ":ToggleTerm direction=vertical size=60<CR>", { noremap = true, silent = true })
-keyset("n", "<A-3>", ":ToggleTerm direction=float<CR>", { noremap = true, silent = true })
-keyset("i", "<C-s>", "<Esc>:w<CR>", { noremap = true, silent = true })
-keyset("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
-keyset("n", "<leader>qa", ":qall<CR>", { desc = "Close Neovim" })
-keyset("n", "<leader>of", [[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua oldfiles<CR>]], { desc = "Recent Files" })
-keyset("n", "<leader>fz", [[<cmd>cd ~<CR>:lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files<CR>]], { desc = "fzf" })
-keyset("n", "<leader>ff", [[<cmd>lua require('fzf-lua').setup({'default'})<CR>:FzfLua files<CR>]], { desc = "search current dir" })
-keyset("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
-keyset("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
-keyset("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
-keyset("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
-keyset("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
-keyset("n", "<leader>fl",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>: FzfLua<CR>]], {desc = "fzf lua", silent = true})
-keyset("n","<leader>ed", ":Neotree document_symbols right<CR>", {desc = "document symbols", silent = true})
-keyset("n","<leader>fc",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua colorschemes<CR>]],{desc = "colorschemes", silent = true})
-keyset("n","<leader>tf",":Telescope file_browser<CR>", {desc = "File pick", silent = true})
-keyset('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+map("n", "<A-1>", ":ToggleTerm direction=horizontal size=20<CR>", { noremap = true, silent = true })
+map("n", "<A-2>", ":ToggleTerm direction=vertical size=60<CR>", { noremap = true, silent = true })
+map("n", "<A-3>", ":ToggleTerm direction=float<CR>", { noremap = true, silent = true })
+map("i", "<C-s>", "<Esc>:w<CR>", { noremap = true, silent = true })
+map("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
+map("n", "<leader>qa", ":qall<CR>", { desc = "Close Neovim" })
+map("n", "<leader>of", [[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua oldfiles<CR>]], { desc = "Recent Files" })
+map("n", "<leader>fz", [[<cmd>cd ~<CR>:lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files<CR>]], { desc = "fzf" })
+map("n", "<leader>ff", [[<cmd>lua require('fzf-lua').setup({'default'})<CR>:FzfLua files<CR>]], { desc = "search current dir" })
+map("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
+map("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
+map("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
+map("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
+map("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
+map("n", "<leader>fl",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>: FzfLua<CR>]], {desc = "fzf lua", silent = true})
+map("n","<leader>ed", ":Neotree document_symbols right<CR>", {desc = "document symbols", silent = true})
+map("n","<leader>fc",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua colorschemes<CR>]],{desc = "colorschemes", silent = true})
+map("n","<leader>tf",":Telescope file_browser<CR>", {desc = "File pick", silent = true})
+map('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
     desc = "Search current word"
 })
-keyset('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
+map('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
     desc = "Search current word"
 })
-keyset('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+map('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
     desc = "Search on current file"
 })
+map({"n","v"}, "<leader>ca", function()
+    require('fzf-lua').lsp_code_actions({
+        winopts = {
+            relative = 'cursor',
+            width = 0.6,
+            height = 0.6,
+            row = 1,
+            preview = { vertical = 'up:50%'},
+        },
+    })
+end, { desc = "Code actions" })
 --Running code lol
 -- NOTE: If clangd or clang doesn't work as intended, do the following
 -- 1) for Linux: clang -v, check the location of GCC it's checking to run, then do sudo apt install libstdc++-12-dev if the gcc version is 12 or 13 if the version is 13
@@ -907,10 +926,10 @@ require("kanagawa").setup({
 require("monet").setup({
     transparent_background = true,
 })
-keyset("n", "S", function()
+map("n", "S", function()
     require("flash").treesitter()
     end, { desc = "Flash Treesitter" })
-keyset("n", "<BS>", "dh")
+map("n", "<BS>", "dh")
 vim.cmd([[let g:auto_save = 1]])
 vim.cmd([[let g:auto_save_silent = 1]])
 require("catppuccin").setup({ flavour = "macchiato" })
@@ -993,28 +1012,28 @@ require("lspconfig").gopls.setup({
 	filetypes = { "go" },
 })
 
-keyset(
+map(
 	"n",
 	"<leader>e",
 	":Neotree filesystem reveal right toggle<CR>",
 	{ desc = "file explorer", noremap = true, silent = true }
 )
-keyset(
+map(
 	"n",
 	"\\",
 	":Neotree right<CR>",
 	{ desc = "file explorer 1", noremap = true, silent = true }
-)keyset(
+)map(
 	"n",
 	"<leader>eg",
 	":Neotree git_status toggle<CR>",
 	{ desc = "file git status", noremap = true, silent = true }
 )
-keyset("n", "i", "a")
+map("n", "i", "a")
 -- <A means alt
-keyset("n", "<A-r>", ":RunCode<CR>:starti<CR>", { noremap = true, silent = true })
-keyset("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
-keyset("n","<leader>n",":New<CR>", {desc = "Create new file", silent = true})
+map("n", "<A-r>", ":RunCode<CR>:starti<CR>", { noremap = true, silent = true })
+map("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
+map("n","<leader>n",":New<CR>", {desc = "Create new file", silent = true})
 
 --nvim-cmp
 local cmp_status_ok, cmp = pcall(require, "cmp")
@@ -1169,27 +1188,27 @@ cmp.setup.cmdline("/", {
 		{ name = "buffer" },
 	},
 })
-keyset("n", "<leader>tt", function()
+map("n", "<leader>tt", function()
 	require("trouble").open()
 end, { desc = "Trouble" })
-keyset("n", "<leader>tw", function()
+map("n", "<leader>tw", function()
 	require("trouble").open("workspace_diagnostics")
 end, { desc = "workspace trouble" })
-keyset("n", "<leader>td", function()
+map("n", "<leader>td", function()
 	require("trouble").open("document_diagnostics")
 end, { desc = "document trouble" })
-keyset("n", "<leader>tq", function()
+map("n", "<leader>tq", function()
 	require("trouble").open("quickfix")
 end, { desc = "quickfix" })
-keyset("n", "<leader>tl", function()
+map("n", "<leader>tl", function()
 	require("trouble").open("loclist")
 end, { desc = "loclist" })
-keyset("n", "gR", function()
+map("n", "gR", function()
 	require("trouble").open("lsp_references")
 end, { desc = "references" })
 
 -- restore the session for the current directory
-keyset(
+map(
 	"n",
 	"<leader>ps",
 	[[<cmd>lua require("persistence").load()<cr>]],
@@ -1197,7 +1216,7 @@ keyset(
 )
 
 -- restore the last session
-keyset(
+map(
 	"n",
 	"<leader>pl",
 	[[<cmd>lua require("persistence").load({ last = true })<cr>]],
@@ -1205,7 +1224,7 @@ keyset(
 )
 
 -- stop Persistence => session won't be saved on exit
-keyset(
+map(
 	"n",
 	"<leader>qd",
 	[[<cmd>lua require("persistence").stop()<cr>]],
