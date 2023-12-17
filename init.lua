@@ -21,16 +21,18 @@ if vim.g.neovide then
 	vim.g.neovide_background_color = "#1f528f"
 end
 -- on save current directory for the buffer becomes the directory for Neovim
-vim.cmd([[au BufWritePre * cd %:p:h]])
 vim.api.nvim_set_var("mapleader", " ")
-map("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
-map("n", "<Esc>", ":noh<CR>", {silent = true})
-map("n", "dir", ":pwd<CR>", { noremap = true, silent = true })
 -- Change diagnostic signs.
-vim.fn.sign_define("DiagnosticSignError", { text = "❌️", texthl = "DiagnosticSignError" })
-vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+vim.diagnostic.config({
+        signs = {
+            text = {
+                [vim.diagnostic.severity.ERROR] = '✘',
+                [vim.diagnostic.severity.WARN] = '',
+                [vim.diagnostic.severity.INFO] = '',
+                [vim.diagnostic.severity.HINT] = '',
+            }
+        }
+    })
 -- map('n','x','_x',{desc = "delete without yanking"})
 vim.o.completeopt = "menuone,noselect"
 opt.cursorline = true
@@ -50,392 +52,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
-	{
-		"nvim-telescope/telescope.nvim",
-		tag = "0.1.2", -- or ,
-		branch = "0.1.x",
-		dependencies = { "nvim-lua/plenary.nvim", "debugloop/telescope-undo.nvim" },
-	},
-	{
-		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate",
-	},
-	{
-		"nvim-tree/nvim-web-devicons",
-	},
-	{
-		"nvim-telescope/telescope-fzf-native.nvim",
-		build = "make",
-	},
-	{
-		"folke/tokyonight.nvim",
-		lazy = false,
-		priority = 1000,
-		opts = {},
-	},
-	{
-		"williamboman/mason.nvim",
-	 	opts = function ()
-			 ensure_installed = {
-				"pyright",
-				"ruff",
-				"ruff-lsp",
-				"jedi-language-server",
-				"gopls",
-				"black",
-				"lua-language-server",
-				"debugpy",
-				"html-lsp",
-				"emmet-language-server",
-				"vale",
-                "codelldb",
-			}
-          return ensure_installed
-      end,
-        config = function(_,opts)
-            -- require("mason").setup(opts)
-		vim.api.nvim_create_user_command("MasonInstallAll", function()
-		vim.cmd("MasonInstall " .. table.concat(ensure_installed, " "))
-		end, {})
-    end,
-	},
-	{
-		"neovim/nvim-lspconfig",
-	},
-	{
-		"folke/trouble.nvim",
-	},
-	{
-		--"mfussenegger/nvim-lint"
-	},
-	{
-		"akinsho/toggleterm.nvim",
-		version = "*",
-		config = true,
-	},
-	{
-		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v3.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"MunifTanjim/nui.nvim",
-			"nvim-tree/nvim-web-devicons",
-		},
-	},
-	{
-		"folke/which-key.nvim",
-	},
-	{
-		"folke/flash.nvim",
-		-- enabled = false,
-		event = "VeryLazy",
-		-- -@type Flash.Config
-		opts = {},
-        -- stylua: ignore
-        keys = {
-            {
-                's', mode = { "n", "o", "x" }, function() require("flash").jump() end, desc = "Jump"
-            },
-            {
-                "r",
-                mode = "o",
-                function() require("flash").remote() end,
-                desc =
-                "Remote Flash"
-            },
-            {
-                "R",
-                mode = { "o", "x" },
-                function() require("flash").treesitter_search() end,
-                desc =
-                "Treesitter Search"
-            },
-            { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-        },
-	},
-	{
-		"akinsho/bufferline.nvim",
-		version = "*",
-		dependencies = "nvim-tree/nvim-web-devicons",
-	},
-	{
-		"williamboman/mason-lspconfig.nvim",
-	},
-	{
-		"lewis6991/gitsigns.nvim",
-	},
-	{
-		--"neoclide/coc.nvim", branch = 'release',
-	},
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-nvim-lua",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-cmdline",
-			"saadparwaiz1/cmp_luasnip",
-			"L3MON4D3/LuaSnip",
-			"rafamadriz/friendly-snippets",
-		},
-	},
-	{
-		"CRAG666/code_runner.nvim",
-		config = true,
-	},
-	{
-		"CRAG666/betterTerm.nvim",
-	},
-	{
-		"tpope/vim-fugitive",
-	},
-	{
-		"windwp/nvim-autopairs",
-		event = "InsertEnter",
-		opts = {},
-	},
-	{
-		"nvim-treesitter/nvim-treesitter-context",
-	},
-	{
-		"numToStr/Comment.nvim",
-		opts = {},
-		lazy = false,
-	},
-	{
-		"nvim-lualine/lualine.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-	},
-	{
-		"folke/zen-mode.nvim",
-	},
-	{
-		"RRethy/vim-illuminate",
-	},
-	{
-		"mfussenegger/nvim-dap",
-		keys = {
-			{
-				"<leader>db",
-				mode = "n",
-				":DapToggleBreakpoint<CR>",
-				desc = "Toggle Breakpoint",
-			},
-			{
-				"<leader>dc",
-				mode = "n",
-				":DapContinue<CR>",
-				desc = "Start debugging",
-			},
-			{
-				"<leader>dt",
-				mode = "n",
-				":DapStepOver<CR>",
-				desc = "Step Over",
-			},
-		},
-	},
-	{
-		"mfussenegger/nvim-dap-python",
-		ft = "python",
-		dependencies = {
-			"mfussenegger/nvim-dap",
-			"rcarriga/nvim-dap-ui",
-			"theHamsta/nvim-dap-virtual-text",
-		},
-	},
-	{
-		"goolord/alpha-nvim",
-		config = function()
-			local dashboard = require("alpha.themes.dashboard")
-			local logo = [[
-.▄▄ ·  ▄▄▄· • ▌ ▄ ·.   .▄▄ · ▄• ▄▌▄▄▄  ·▄▄▄.▄▄ ·   
-▐█ ▀. ▐█ ▀█ ·██ ▐███▪  ▐█ ▀. █▪██▌▀▄ █·▐▄▄·▐█ ▀.   
-▄▀▀▀█▄▄█▀▀█ ▐█ ▌▐▌▐█·  ▄▀▀▀█▄█▌▐█▌▐▀▀▄ ██▪ ▄▀▀▀█▄  
-▐█▄▪▐█▐█ ▪▐▌██ ██▌▐█▌  ▐█▄▪▐█▐█▄█▌▐█•█▌██▌.▐█▄▪▐█ ࿐w࿐a࿐v࿐e࿐s࿐ 
- ▀▀▀▀  ▀  ▀ ▀▀  █▪▀▀▀   ▀▀▀▀  ▀▀▀ .▀  ▀▀▀▀  ▀▀▀▀   
-            ]]
-            local footer = [[
- ______ ╚(ಠ_ಠ)=┐ '''⌐(ಠ۾ಠ)¬''' ᕙ(⇀‸↼‶)ᕗ (︶︹︺) ( ͡ಠ ͜ʖ ͡ಠ) ಠ_ಠ¯ \_(ツ)_/¯  ______
-            ]]
-         dashboard.section.header.val = vim.split(logo, "\n")
-         dashboard.section.footer.val = vim.split(footer, "\n")
-      -- stylua: ignore
-      dashboard.section.buttons.val = {
-        dashboard.button("f", " " .. " Find file",       [[<cmd> lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files <CR>]]),
-        dashboard.button("n", " " .. " New file",        "<cmd> New<cr>"),
-        dashboard.button("b", " " .. " Folder browser",  "<cmd> Telescope file_browser<cr>"),
-        dashboard.button("r", " " .. " Recent files",    "<cmd> Telescope oldfiles <cr>"),
-        dashboard.button("g", " " .. " Find text",       "<cmd> Telescope live_grep <cr>"),
-        dashboard.button("c", " " .. " Config",          "<cmd> e $MYVIMRC <cr>"),
-        dashboard.button("s", " " .. " Restore Session", [[<cmd> lua require("persistence").load() <cr>]]),
-        dashboard.button("l", "󰒲 " .. " Lazy",            "<cmd> Lazy <cr>"),
-        dashboard.button("q", " " .. " Quit",            "<cmd> qa <cr>"),
-      }
-			require("alpha").setup(dashboard.opts)
-		end,
-	},
-	{
-		"nvimtools/none-ls.nvim",
-		event = "VeryLazy",
-	},
-	{
-		"rcarriga/nvim-dap-ui",
-		dependencies = "mfussenegger/nvim-dap",
-		config = function()
-			local dap = require("dap")
-			local dapui = require("dapui")
-			dapui.setup()
-			dap.listeners.after.event_initialized["dapui_config"] = function()
-				dapui.open()
-			end
-			dap.listeners.before.event_terminated["dapui_config"] = function()
-				dapui.close()
-			end
-			dap.listeners.before.event_exited["dapui_config"] = function()
-				dapui.close()
-			end
-		end,
-	},
-	{
-		"folke/neodev.nvim",
-		opts = {},
-	},
-	{
-		"folke/persistence.nvim",
-		event = "BufReadPre", -- this will only start session saving when an actual file was opened
-		opts = {
-			-- add any custom options here
-		},
-	},
-	{
-		"JoosepAlviste/nvim-ts-context-commentstring",
-	},
-    {
-		"iamcco/markdown-preview.nvim",
-		event = "VeryLazy",
-	},
-	{
-		"folke/noice.nvim",
-		event = "VeryLazy",
-		dependencies = { "rcarriga/nvim-notify", "MunifTanjim/nui.nvim" },
-		opts = {
-			-- add any options here
-		},
-	},
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        priority = 1000,
-    },
-    {
-        "petertriho/nvim-scrollbar",
-    },
-    {
-        -- "MunifTanjim/nui.nvim",
-    },
-    {
-        "rcarriga/nvim-notify",
-    },
-    {
-        "EdenEast/nightfox.nvim",
-    },
-    {
-        "marko-cerovac/material.nvim",
-        event = "VeryLazy",
-	},
-	{
-		"rebelot/kanagawa.nvim",
-	},
-	{
-		"xiyaowong/transparent.nvim",
-	},
-	{
-		"nvim-telescope/telescope-dap.nvim",
-		enabled = false,
-	},
-	{
-		"christoomey/vim-tmux-navigator",
-	},
-	{
-		"907th/vim-auto-save",
-	},
-	{
-		-- "stevearc/conform.nvim",
-		-- event = "BufReadPre",
-	},
-	{
-		"utilyre/barbecue.nvim",
-		name = "barbecue",
-		version = "*",
-		dependencies = { "SmiteshP/nvim-navic", "nvim-tree/nvim-web-devicons" },
-		opts = {},
-	},
-	{
-		"johngrib/vim-game-snake",
-		event = "VeryLazy",
-	},
-	{
-		"pwntester/octo.nvim",
-		event = "VeryLazy",
-	},
-	{
-		"ThePrimeagen/refactoring.nvim",
-		event = "VeryLazy",
-	},
-	{
-		"theHamsta/nvim-dap-virtual-text",
-		dependencies = { "mfussenegger/nvim-dap", "nvim-treesitter/nvim-treesitter" },
-		event = "VeryLazy",
-	},
-	{
-		"norcalli/nvim-colorizer.lua",
-	},
-    {
-        "Exafunction/codeium.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "hrsh7th/nvim-cmp",
-        },
-        config = function ()
-            require("codeium").setup({})
-        end
-    },{
-        "RRethy/nvim-base16",
-    },{
-        -- "aikooo7/funnyfiles.nvim",
-    },
-    {
-        "simrat39/rust-tools.nvim",
-    },{
-        "chrisgrieser/nvim-genghis",
-    },{
-        "ibhagwan/fzf-lua"
-    },{
-        "lewis6991/hover.nvim",
-    },{
-        "smjonas/inc-rename.nvim",
-        config = function ()
-            require("inc_rename").setup()
-        end,
-    },{
-        "navarasu/onedark.nvim"
-    },{
-        "CantoroMC/ayu-nvim",
-    },{
-        "nvim-telescope/telescope-file-browser.nvim",
-        dependencies = "nvim-telescope/telescope.nvim"
-    },{
-        "arturgoms/moonbow.nvim"
-    },{
-        -- "nvim-pack/nvim-spectre",
-    },{
-        "fynnfluegge/monet.nvim",
-        name = "monet"
-    }
-})
+require("lazy").setup("plugins")
 
 -- map('n', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
 -- map('i', '<Esc>', '<Esc>:w<CR>', { desc = "trying auto save" })
@@ -458,51 +75,6 @@ require("nvim-treesitter.configs").setup({
 		"toml",
 	},
 })
-require("telescope").setup({
-    defaults = {
-        prompt_prefix = "   ",
-        selection_caret = "  ",
-        entry_prefix = "  ",
-        sorting_strategy = "ascending",
-        layout_strategy = "horizontal",
-        layout_config = {
-              horizontal = {
-                prompt_position = "top",
-                preview_width = 0.55,
-                results_width = 0.8,
-              },
-              vertical = {
-                mirror = false,
-              },
-              width = 0.87,
-              height = 0.80,
-              preview_cutoff = 120,
-        },
-            color_devicons = true,
-        set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
-        file_sorter = require("telescope.sorters").get_fuzzy_file,
-        -- border = false
-    },
-    -- extensions_list = { "file_browser", "fzf", "undo" , "themes"},
-	extensions = {
-		fzf = {
-			fuzzy = true, -- false will only do exact matching
-			override_generic_sorter = true, -- override the generic sorter
-			override_file_sorter = true, -- override the file sorter
-			case_mode = "smart_case", -- or "ignore_case" or "respect_case"
-			-- the default case_mode is "smart_case"
-		},
-        file_browser = {
-            -- display_stat = {date = false, size = false, mode = false},
-            -- theme - "ivy",
-            -- select_buffer = true,
-        }
-	},
-})
-require("telescope").load_extension("undo")
-require("telescope").load_extension("fzf")
-require("telescope").load_extension("file_browser")
--- require("telescope.themes").setup{}
 require("mason").setup({
 	ui = {
 		icons = {
@@ -512,11 +84,9 @@ require("mason").setup({
 		},
 	},
 })
-require("mason-lspconfig").setup({})
 require("rust-tools").setup{}
 require("gitsigns").setup({})
 require("colorizer").setup({})
-vim.cmd[[au BufEnter * :ColorizerToggle]]
 require("treesitter-context").setup({})
 require("nvim-autopairs").setup({})
 -- require('telescope').load_extension('dap')
@@ -547,20 +117,20 @@ require("Comment").setup({
 		})
 	end,
 })
-local colors = require("tokyonight.colors").setup()
-require("scrollbar").setup({
-	handle = {
-		color = "#b2beb5",
-	},
-	marks = {
-		Search = { color = colors.orange },
-		Error = { color = colors.error },
-		Warn = { color = colors.warning },
-		Info = { color = colors.info },
-		Hint = { color = colors.hint },
-		Misc = { color = colors.purple },
-	},
-})
+-- local colors = require("tokyonight.colors").setup()
+-- require("scrollbar").setup({
+-- 	handle = {
+-- 		color = "#b2beb5",
+-- 	},
+-- 	marks = {
+-- 		Search = { color = colors.orange },
+-- 		Error = { color = colors.error },
+-- 		Warn = { color = colors.warning },
+-- 		Info = { color = colors.info },
+-- 		Hint = { color = colors.hint },
+-- 		Misc = { color = colors.purple },
+-- 	},
+-- })
 require("hover").setup {
             init = function()
                 -- Require providers
@@ -591,10 +161,7 @@ require("hover").setup {
         -- Mouse support
         map('n', '<MouseMove>', require('hover').hover_mouse, { desc = "hover.nvim (mouse)" })
         vim.o.mousemoveevent = true
-require("onedark").setup{
-    style = "warmer",
-    transparent = true,
-}
+
 
 require("fzf-lua").setup({
     lsp ={
@@ -604,7 +171,9 @@ require("fzf-lua").setup({
         },
     },
 })
-
+require("keymaps")
+require("plugins")
+require("autocommands")
 require("barbecue").setup({
 	theme = {
 		-- this highlight is used to override other highlights
@@ -651,55 +220,6 @@ require("barbecue").setup({
 		context_type_parameter = { fg = "#ac8fe4" },
 	},
 })
-local function lspinfo()
-	local msg = "No Active Lsp"
-	local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
-	local clients = vim.lsp.get_active_clients()
-	if next(clients) == nil then
-		return msg
-	end
-	local active_clients = {}
-	for _, client in ipairs(clients) do
-		local filetypes = client.config.filetypes
-		if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-			table.insert(active_clients, client.name)
-		end
-	end
-	if #active_clients > 0 then
-		return table.concat(active_clients, ", ")
-	else
-		return msg
-	end
-end
-
-local lspinfo_component = {
-	function()
-		return lspinfo()
-	end,
-	icon = " LSP:",
-	color = { fg = "#87ceeb", gui = "bold" },
-}
-local function surfer()
-	return [[SamuelSurf]]
-end
-require("lualine").setup({
-	options = {
-        section_separators = { left = '', right = '' },
-		component_separators = "|",
-		theme = "moonbow",
-        globalstatus = true,
-       --separator = { left = '', right = '' }, right_padding = 2 
-	},
-	sections = {
-        lualine_a = {
-          { 'mode', separator = { left = '', right = '' }, right_padding = 2 },
-    },
-		lualine_c = { "filename"},
-		lualine_x = { lspinfo_component, surfer, "filetype" },
-        lualine_z = {
-                      { 'location', separator = {left = '', right = '' }, left_padding = 2 },
-	},
-}})
 require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
 --which-key
 require("which-key").setup({
@@ -737,8 +257,6 @@ vim.g.transparent_enabled = false
 -- 		lsp_fallback = false,
 -- 	},
 -- })
--- Format Python files on save
-vim.cmd([[au BufWritePre *.py :lua vim.lsp.buf.format{timeout_ms = 10000}]])
 require("neodev").setup({
 	library = { plugins = { "nvim-dap-ui" }, types = true },
 })
@@ -787,118 +305,6 @@ require("noice").setup({
 		lsp_doc_border = false, -- add a border to hover docs and signature help
 	},
 })
-map(
-	"n",
-	"<leader>/",
-	"<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
-	{ desc = "Comment line" }
-)
-map(
-	"x",
-	"<leader>/",
-	"<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
-	{ desc = "Comment line" }
-)
-map("n", "<leader>ft", ":Telescope live_grep<CR>", { noremap = true })
-map("n", "<C-m>", ":Mason<CR>", { noremap = true })
-map("n", "<leader>cl", ":LspInfo<cr>", { desc = "Lsp Info" })
-map("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
-map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
--- map("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
-map("n", "<leader>ih", ":lua vim.lsp.inlay_hint.enable(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
-map("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
-map("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
-map("n", "<leader>k", ":lua vim.lsp.buf.definition()<CR>", { desc = "Show definition" })
-map("n", ":Q", ":q", { noremap = true })
-map("n", "<leader>fd", ":lua vim.lsp.buf.format{timeout_ms = 12000}<CR>", { desc = "Format" })
-map("n", "p", "P", { noremap = true })
-map("n", "yy", "0y$", { noremap = true })
-map("n", "<leader>a", "gg0vG$", { desc = "highlight entire document" })
-map("n", "<leader>vs", ":VimGameSnake<CR>", { desc = "Play Vim Snake" })
-map("n", "<leader>ss", ":echo g:VimSnakeScore<CR>", { desc = "See Snake score" })
-map("n", "<leader>ga", ":G add .<CR>", { desc = "git add your changes", silent = true })
-map("n", "<leader>gc", ":G commit<CR>", { desc = "add a commit message" })
-map("n", "<leader>gp", ":G push<CR>", { desc = "Push changes to Github" })
-map("n", "<C-Left>", "<C-w>>", { desc = "Increasing width" })
-map("n", "<C-Right>", "<C-w><", { desc = "Decreasing width" })
-map("n", "<C-Up>", "<C-w>+", { desc = "Increasing height" })
-map("n", "<C-Down>", "<C-w>-", { desc = "Decreasing height" })
-map("n", "<leader>tb", ":Telescope buffers<CR>", { desc = "open buffers", silent = true })
-map("n", "<leader>te", ":terminal<CR>starti<CR>", { desc = "open Terminal", silent = true })
-map("n", "<leader>rn",
-function()
-    return ":IncRename " .. vim.fn.expand("<cword>")
-end,
-    {desc = "Lsp Rename", silent = true, expr = true})
-map("n", "<leader>nf", ":Neotree position=float<CR>", {desc = "Floating file view", silent = true})
-map("n", "<leader>nc", ":Neotree position=current<CR>", {desc = "Huge file view", silent = true})
--- Define the key mappings
-map("n", "<A-1>", ":ToggleTerm direction=horizontal size=20<CR>", { noremap = true, silent = true })
-map("n", "<A-2>", ":ToggleTerm direction=vertical size=60<CR>", { noremap = true, silent = true })
-map("n", "<A-3>", ":ToggleTerm direction=float<CR>", { noremap = true, silent = true })
-map("i", "<C-s>", "<Esc>:w<CR>", { noremap = true, silent = true })
-map("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
-map("n", "<leader>qa", ":qall<CR>", { desc = "Close Neovim" })
-map("n", "<leader>of", [[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua oldfiles<CR>]], { desc = "Recent Files" })
-map("n", "<leader>fz", [[<cmd>cd ~<CR>:lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files<CR>]], { desc = "fzf" })
-map("n", "<leader>ff", [[<cmd>lua require('fzf-lua').setup({'default'})<CR>:FzfLua files<CR>]], { desc = "search current dir" })
-map("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
-map("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
-map("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
-map("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
-map("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
-map("n", "<leader>fl",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>: FzfLua<CR>]], {desc = "fzf lua", silent = true})
-map("n","<leader>ed", ":Neotree document_symbols right<CR>", {desc = "document symbols", silent = true})
-map("n","<leader>fc",[[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua colorschemes<CR>]],{desc = "colorschemes", silent = true})
-map("n","<leader>tf",":Telescope file_browser<CR>", {desc = "File pick", silent = true})
-map('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-    desc = "Search current word"
-})
-map('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
-    desc = "Search current word"
-})
-map('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-    desc = "Search on current file"
-})
-map({"n","v"}, "<leader>ca", function()
-    require('fzf-lua').lsp_code_actions({
-        winopts = {
-            relative = 'cursor',
-            width = 0.6,
-            height = 0.6,
-            row = 1,
-            preview = { vertical = 'up:50%'},
-        },
-    })
-end, { desc = "Code actions" })
---Running code lol
--- NOTE: If clangd or clang doesn't work as intended, do the following
--- 1) for Linux: clang -v, check the location of GCC it's checking to run, then do sudo apt install libstdc++-12-dev if the gcc version is 12 or 13 if the version is 13
--- 2) for Windows, use the visual studio installer and install clang instead of other sources, and then add clang to path in environment variables
--- vim.cmd([[
--- augroup exe_code
---     autocmd!
---     autocmd FileType python noremap <buffer> <F5>
---     	\ :sp<CR>:term python3 %<CR> i
---     autocmd FileType cpp noremap <buffer> <F5>
---     \ :sp<CR>:term clang++ % -o %:r;%:r<CR> i
---     autocmd FileType c noremap <buffer> <F5>
---     \ :sp<CR>:term clang % -o %:r;%:r<CR> i
--- augroup END
--- ]])
--- Time to improve the code running experience lol
-vim.cmd([[
-augroup exe_code
-    autocmd!
-    autocmd FileType python noremap <buffer> <F4>
-    	\ :TermExec cmd="python3 %" size=20<CR>:wincmd j<CR>:starti<CR>
-    autocmd FileType cpp noremap <buffer> <F4>
-    \ :w<CR>:TermExec cmd="clang++ % -o %:r;./%:r" direction=float <CR>
-    autocmd FileType c noremap <buffer> <F4>
-    \ :w<CR>:TermExec cmd="clang % -o %:r;./%:r" direction=float <CR>
-augroup END
-]])
-
 require("neo-tree").setup({
 	enable_git_status = true,
 	enable_diagnostics = true,
@@ -919,21 +325,8 @@ require("neo-tree").setup({
         follow_cursor = true,
     },
 })
-require("kanagawa").setup({
-    transparent = true,
-    -- terminalColors = false,
-})
-require("monet").setup({
-    transparent_background = true,
-})
-map("n", "S", function()
-    require("flash").treesitter()
-    end, { desc = "Flash Treesitter" })
-map("n", "<BS>", "dh")
 vim.cmd([[let g:auto_save = 1]])
 vim.cmd([[let g:auto_save_silent = 1]])
-require("catppuccin").setup({ flavour = "macchiato" })
-vim.cmd([[colorscheme monet]])
 require("bufferline").setup({
 	options = {
 		offsets = {
@@ -946,94 +339,6 @@ require("bufferline").setup({
 		},
 	},
 })
-
-local nvim_lsp = require("lspconfig")
-nvim_lsp.pyright.setup({
-	python = {
-		analysis = {
-			"openFilesOnly",
-		},
-	},
-})
-nvim_lsp.bashls.setup({})
-nvim_lsp.emmet_language_server.setup({})
-nvim_lsp.cssls.setup({})
-nvim_lsp.tsserver.setup({})
-nvim_lsp.jsonls.setup({})
-nvim_lsp.ruff_lsp.setup({})
---Enable (broadcasting) snippet capability for completion
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-nvim_lsp.html.setup({
-	capabilities = capabilities,
-})
-
--- require'lspconfig'.pylyzer.setup{}
-nvim_lsp.clangd.setup({
-	cmd = { "clangd", "--clang-tidy" },
-	filetypes = { "c", "cpp" },
-	root_dir = require("lspconfig").util.root_pattern(".git", "compile_commands.json"),
-})
-local cmp1 = require("cmp")
-cmp1.setup({ sources = { name = "nvim_lsp" } })
-require("lspconfig").lua_ls.setup({
-	Lua = {
-		diagnostics = {
-			libraryFiles = "Disable",
-		},
-		workspace = {
-			checkThirdParty = false,
-			maxPreload = 2,
-		},
-		telemetry = { enable = false },
-		hint = {
-			enable = true,
-		},
-	},
-})
--- Neovim config for PowerShell Editor Services
-require("lspconfig").powershell_es.setup({
-	cmd = {
-		"pwsh",
-		"-NoLogo",
-		"-NoProfile",
-		"-NonInteractive",
-		"-ExecutionPolicy",
-		"Bypass",
-		"-Command",
-		"EditorServices.StartEditorServices()",
-	},
-	filetypes = { "powershell" },
-})
--- Configure gopls
-require("lspconfig").gopls.setup({
-	cmd = { "gopls", "serve" },
-	filetypes = { "go" },
-})
-
-map(
-	"n",
-	"<leader>e",
-	":Neotree filesystem reveal right toggle<CR>",
-	{ desc = "file explorer", noremap = true, silent = true }
-)
-map(
-	"n",
-	"\\",
-	":Neotree right<CR>",
-	{ desc = "file explorer 1", noremap = true, silent = true }
-)map(
-	"n",
-	"<leader>eg",
-	":Neotree git_status toggle<CR>",
-	{ desc = "file git status", noremap = true, silent = true }
-)
-map("n", "i", "a")
--- <A means alt
-map("n", "<A-r>", ":RunCode<CR>:starti<CR>", { noremap = true, silent = true })
-map("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
-map("n","<leader>n",":New<CR>", {desc = "Create new file", silent = true})
 
 --nvim-cmp
 local cmp_status_ok, cmp = pcall(require, "cmp")
@@ -1188,45 +493,4 @@ cmp.setup.cmdline("/", {
 		{ name = "buffer" },
 	},
 })
-map("n", "<leader>tt", function()
-	require("trouble").open()
-end, { desc = "Trouble" })
-map("n", "<leader>tw", function()
-	require("trouble").open("workspace_diagnostics")
-end, { desc = "workspace trouble" })
-map("n", "<leader>td", function()
-	require("trouble").open("document_diagnostics")
-end, { desc = "document trouble" })
-map("n", "<leader>tq", function()
-	require("trouble").open("quickfix")
-end, { desc = "quickfix" })
-map("n", "<leader>tl", function()
-	require("trouble").open("loclist")
-end, { desc = "loclist" })
-map("n", "gR", function()
-	require("trouble").open("lsp_references")
-end, { desc = "references" })
 
--- restore the session for the current directory
-map(
-	"n",
-	"<leader>ps",
-	[[<cmd>lua require("persistence").load()<cr>]],
-	{ desc = "restore session for dir" }
-)
-
--- restore the last session
-map(
-	"n",
-	"<leader>pl",
-	[[<cmd>lua require("persistence").load({ last = true })<cr>]],
-	{ desc = "restore last session" }
-)
-
--- stop Persistence => session won't be saved on exit
-map(
-	"n",
-	"<leader>qd",
-	[[<cmd>lua require("persistence").stop()<cr>]],
-	{ desc = "Don't save session" }
-)
