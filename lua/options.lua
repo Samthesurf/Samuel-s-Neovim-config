@@ -39,4 +39,17 @@ opt.smartcase = true
 opt.clipboard:append("unnamedplus")
 vim.cmd([[let g:auto_save = 1]])
 vim.cmd([[let g:auto_save_silent = 1]])
+-- Inform nvim how to enable undercurl
+vim.cmd[[
+    let &t_Cs = "\e[4:3m"
+    let &t_Ce = "\e[4:0m"
+
+hi SpellBad guisp=red gui=undercurl term=underline cterm=undercurl    
+hi SpellCap guisp=yellow gui=undercurl term=underline cterm=undercurl    
+hi SpellRare guisp=blue gui=undercurl term=underline cterm=undercurl
+hi SpellLocal guisp=orange gui=undercurl term=underline cterm=undercurl    
+
+set spell
+]]
+
 

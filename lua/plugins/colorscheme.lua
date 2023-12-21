@@ -12,6 +12,13 @@ return {
 		{
 			"marko-cerovac/material.nvim",
 			event = "VeryLazy",
+            config = function()
+                require("material").setup({
+                    disable = {
+                        background = true,
+                    }
+                })
+            end
 		},
 		{
 			"rebelot/kanagawa.nvim",
@@ -28,8 +35,9 @@ return {
 			config = function()
 				require("onedark").setup({
 					style = "warmer",
-					transparent = true,
+					-- transparent = true,
 				})
+                vim.cmd.colorscheme "onedark"
 			end,
 		},
 		{
@@ -42,7 +50,7 @@ return {
 				require("monet").setup({
 					-- transparent_background = true,
 				})
-				vim.cmd([[colorscheme monet]])
+				-- vim.cmd([[colorscheme monet]])
 			end,
 		},
 		{

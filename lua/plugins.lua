@@ -18,15 +18,6 @@ return {
 		config = true,
 	},
 	{
-		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v3.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"MunifTanjim/nui.nvim",
-			"nvim-tree/nvim-web-devicons",
-		},
-	},
-	{
 		"folke/which-key.nvim",
 	},
 	{
@@ -65,10 +56,15 @@ return {
 	},
 	{
 		"CRAG666/code_runner.nvim",
-		config = true,
+		config = function ()
+		  require("code_runner").setup({})
+		end,
 	},
 	{
 		"CRAG666/betterTerm.nvim",
+        config = function()
+            require("betterTerm").setup({})
+        end
 	},
 	{
 		"tpope/vim-fugitive",
@@ -86,7 +82,6 @@ return {
 		opts = {},
 		lazy = false,
 	},
-	{},
 	{
 		"folke/zen-mode.nvim",
 	},
