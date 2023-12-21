@@ -1,4 +1,6 @@
+-- on save current directory for the buffer becomes the directory for Neovim
 vim.cmd([[au BufWritePre * cd %:p:h]])
+
 --Running code lol
 -- NOTE: If clangd or clang doesn't work as intended, do the following
 -- 1) for Linux: clang -v, check the location of GCC it's checking to run, then do sudo apt install libstdc++-12-dev if the gcc version is 12 or 13 if the version is 13

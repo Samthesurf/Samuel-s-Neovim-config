@@ -1,43 +1,5 @@
-local opt = vim.opt
 local map = vim.keymap.set
-vim.o.mouse = "a"
-opt.number = true
-opt.relativenumber = true
-vim.o.splitbelow = true
-vim.o.splitright = true
-vim.o.incsearch = true
-opt.hlsearch = true
-opt.ignorecase = true
-opt.tabstop = 4
-opt.softtabstop = 4
-opt.shiftwidth = 4
-opt.smartindent = true
-opt.expandtab = true
-opt.termguicolors = true
-opt.guifont = "JetBrainsMono Nerd Font:h10:b"
-if vim.g.neovide then
-	opt.guifont = "JetBrainsMono Nerd Font:h11:b"
-	vim.g.neovide_transparency = 0.65
-	vim.g.neovide_background_color = "#1f528f"
-end
--- on save current directory for the buffer becomes the directory for Neovim
-vim.api.nvim_set_var("mapleader", " ")
--- Change diagnostic signs.
-vim.diagnostic.config({
-        signs = {
-            text = {
-                [vim.diagnostic.severity.ERROR] = '✘',
-                [vim.diagnostic.severity.WARN] = '',
-                [vim.diagnostic.severity.INFO] = '',
-                [vim.diagnostic.severity.HINT] = '',
-            }
-        }
-    })
--- map('n','x','_x',{desc = "delete without yanking"})
-vim.o.completeopt = "menuone,noselect"
-opt.cursorline = true
-opt.smartcase = true
-opt.clipboard:append("unnamedplus")
+vim.g.mapleader = " "
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -50,7 +12,7 @@ if not vim.loop.fs_stat(lazypath) then
 		lazypath,
 	})
 end
-opt.rtp:prepend(lazypath)
+vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins")
 
@@ -73,15 +35,6 @@ require("nvim-treesitter.configs").setup({
 		"css",
 		"vim",
 		"toml",
-	},
-})
-require("mason").setup({
-	ui = {
-		icons = {
-			package_installed = "✓",
-			package_pending = "➜",
-			package_uninstalled = "✗",
-		},
 	},
 })
 require("rust-tools").setup{}
@@ -139,7 +92,7 @@ require("hover").setup {
                 -- require('hover.providers.gh_user')
                 -- require('hover.providers.jira')
                 -- require('hover.providers.man')
-                -- require('hover.providers.dictionary')
+                require('hover.providers.dictionary')
             end,
             preview_opts = {
                 border = 'single'
@@ -174,52 +127,7 @@ require("fzf-lua").setup({
 require("keymaps")
 require("plugins")
 require("autocommands")
-require("barbecue").setup({
-	theme = {
-		-- this highlight is used to override other highlights
-		-- you can take advantage of its bg and set a background throughout your winbar
-		-- (e.g. basename will look like this: { fg = "#c0caf5", bold = true })
-		normal = { fg = "#c0caf5" },
-
-		-- these highlights correspond to symbols table from config
-		ellipsis = { fg = "#737aa2" },
-		separator = { fg = "#737aa2" },
-		modified = { fg = "#737aa2" },
-
-		-- these highlights represent the _text_ of three main parts of barbecue
-		dirname = { fg = "#737aa2" },
-		basename = { bold = true },
-		context = {},
-
-		-- these highlights are used for context/navic icons
-		context_file = { fg = "#ac8fe4" },
-		context_module = { fg = "#ac8fe4" },
-		context_namespace = { fg = "#ac8fe4" },
-		context_package = { fg = "#ac8fe4" },
-		context_class = { fg = "#ac8fe4" },
-		context_method = { fg = "#ac8fe4" },
-		context_property = { fg = "#ac8fe4" },
-		context_field = { fg = "#ac8fe4" },
-		context_constructor = { fg = "#ac8fe4" },
-		context_enum = { fg = "#ac8fe4" },
-		context_interface = { fg = "#ac8fe4" },
-		context_function = { fg = "#ac8fe4" },
-		context_variable = { fg = "#ac8fe4" },
-		context_constant = { fg = "#ac8fe4" },
-		context_string = { fg = "#ac8fe4" },
-		context_number = { fg = "#ac8fe4" },
-		context_boolean = { fg = "#ac8fe4" },
-		context_array = { fg = "#ac8fe4" },
-		context_object = { fg = "#ac8fe4" },
-		context_key = { fg = "#ac8fe4" },
-		context_null = { fg = "#ac8fe4" },
-		context_enum_member = { fg = "#ac8fe4" },
-		context_struct = { fg = "#ac8fe4" },
-		context_event = { fg = "#ac8fe4" },
-		context_operator = { fg = "#ac8fe4" },
-		context_type_parameter = { fg = "#ac8fe4" },
-	},
-})
+require("options")
 require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
 --which-key
 require("which-key").setup({
@@ -262,12 +170,6 @@ require("neodev").setup({
 })
 require("code_runner").setup({})
 require("betterTerm").setup({})
-vim.cmd([[
-  augroup toggleterm
-    autocmd!
-    autocmd TermOpen * call settabvar(1, 'toggleterm_directory', expand('%:p:h'))
-  augroup END
-]])
 
 -- Inform nvim how to enable undercurl
 vim.cmd[[
@@ -325,172 +227,158 @@ require("neo-tree").setup({
         follow_cursor = true,
     },
 })
-vim.cmd([[let g:auto_save = 1]])
-vim.cmd([[let g:auto_save_silent = 1]])
-require("bufferline").setup({
-	options = {
-		offsets = {
-			{
-				filetype = "neo-tree",
-				text = "Sam's files",
-				highlight = "Directory",
-				separator = true, -- use a "true" to enable the default, or set your own character
-			},
-		},
-	},
-})
 
 --nvim-cmp
 local cmp_status_ok, cmp = pcall(require, "cmp")
-if not cmp_status_ok then
-	return
-end
+		if not cmp_status_ok then
+			return
+		end
 
-local snip_status_ok, luasnip = pcall(require, "luasnip")
-if not snip_status_ok then
-	return
-end
+		local snip_status_ok, luasnip = pcall(require, "luasnip")
+		if not snip_status_ok then
+			return
+		end
 
-require("luasnip/loaders/from_vscode").lazy_load()
+		require("luasnip/loaders/from_vscode").lazy_load()
 
-local check_backspace = function()
-	local col = vim.fn.col(".") - 1
-	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
-end
+		local check_backspace = function()
+			local col = vim.fn.col(".") - 1
+			return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
+		end
 
-local kind_icons = {
-	Text = "󰉿",
-	Method = "󰆧",
-	Function = "󰊕",
-	Constructor = "",
-	Field = " ",
-	Variable = "󰀫",
-	Class = "󰠱",
-	Interface = "",
-	Module = "",
-	Property = "󰜢",
-	Unit = "󰑭",
-	Value = "󰎠",
-	Enum = "",
-	Keyword = "󰌋",
-	Snippet = "",
-	Color = "󰏘",
-	File = "󰈙",
-	Reference = "",
-	Folder = "󰉋",
-	EnumMember = "",
-	Constant = "󰏿",
-	Struct = "",
-	Event = "",
-	Operator = "󰆕",
-	TypeParameter = " ",
-	Misc = " ",
-}
--- find more here: https://www.nerdfonts.com/cheat-sheet
-cmp.setup({
-	snippet = {
-		expand = function(args)
-			luasnip.lsp_expand(args.body) -- For `luasnip` users.
-		end,
-	},
-	mapping = {
-		["<C-k>"] = cmp.mapping.select_prev_item(),
-		["<C-j>"] = cmp.mapping.select_next_item(),
-		["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
-		["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
-		["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-		["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-		["<C-e>"] = cmp.mapping({
-			i = cmp.mapping.abort(),
-			c = cmp.mapping.close(),
-		}),
-		-- Accept currently selected item. If none selected, `select` first item.
-		-- Set `select` to `false` to only confirm explicitly selected items.
-		["<CR>"] = cmp.mapping.confirm({ select = true }),
-		-- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
-		["<Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif luasnip.expandable() then
-				luasnip.expand()
-			elseif luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
-			elseif check_backspace() then
-				fallback()
-			else
-				fallback()
-			end
-		end, {
-			"i",
-			"s",
-		}),
-		["<S-Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end, {
-			"i",
-			"s",
-		}),
-	},
-	formatting = {
-		fields = { "kind", "abbr", "menu" },
-		format = function(entry, vim_item)
-			-- Kind icons
-			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
-			vim_item.menu = ({
-                codeium = "AI",
-				nvim_lsp = "LSP",
-				luasnip = "Snippet",
-				buffer = "Buffer",
-				path = "Path",
-			})[entry.source.name]
-			return vim_item
-		end,
-	},
-	sources = {
-        { name = "codeium"},
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-		{ name = "buffer" },
-		{ name = "path" },
-	},
-	confirm_opts = {
-		behavior = cmp.ConfirmBehavior.Replace,
-		select = false,
-	},
-	window = {
-		documentation = {
-			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-		},
-	},
-	experimental = {
-		ghost_text = false,
-		native_menu = false,
-	},
-})
-cmp.setup.cmdline(":", {
-	mapping = cmp.mapping.preset.cmdline(),
-	sources = cmp.config.sources({
-		{ name = "path" },
-	}, {
-		{
-			name = "cmdline",
-			option = {
-				ignore_cmds = { "Man", "!" },
+		local kind_icons = {
+			Text = "󰉿",
+			Method = "󰆧",
+			Function = "󰊕",
+			Constructor = "",
+			Field = " ",
+			Variable = "󰀫",
+			Class = "󰠱",
+			Interface = "",
+			Module = "",
+			Property = "󰜢",
+			Unit = "󰑭",
+			Value = "󰎠",
+			Enum = "",
+			Keyword = "󰌋",
+			Snippet = "",
+			Color = "󰏘",
+			File = "󰈙",
+			Reference = "",
+			Folder = "󰉋",
+			EnumMember = "",
+			Constant = "󰏿",
+			Struct = "",
+			Event = "",
+			Operator = "󰆕",
+			TypeParameter = " ",
+			Misc = " ",
+		}
+		-- find more here: https://www.nerdfonts.com/cheat-sheet
+
+		cmp.setup({
+			snippet = {
+				expand = function(args)
+					luasnip.lsp_expand(args.body) -- For `luasnip` users.
+				end,
 			},
-		},
-	}),
-})
-cmp.setup.cmdline("/", {
-	mapping = cmp.mapping.preset.cmdline(),
-	sources = {
-		{ name = "buffer" },
-	},
-})
-
+			mapping = {
+				["<C-k>"] = cmp.mapping.select_prev_item(),
+				["<C-j>"] = cmp.mapping.select_next_item(),
+				["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
+				["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+				["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+				["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+				["<C-e>"] = cmp.mapping({
+					i = cmp.mapping.abort(),
+					c = cmp.mapping.close(),
+				}),
+				-- Accept currently selected item. If none selected, `select` first item.
+				-- Set `select` to `false` to only confirm explicitly selected items.
+				["<CR>"] = cmp.mapping.confirm({ select = true }),
+				-- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+				["<Tab>"] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.select_next_item()
+					elseif luasnip.expandable() then
+						luasnip.expand()
+					elseif luasnip.expand_or_jumpable() then
+						luasnip.expand_or_jump()
+					elseif check_backspace() then
+						fallback()
+					else
+						fallback()
+					end
+				end, {
+					"i",
+					"s",
+				}),
+				["<S-Tab>"] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.select_prev_item()
+					elseif luasnip.jumpable(-1) then
+						luasnip.jump(-1)
+					else
+						fallback()
+					end
+				end, {
+					"i",
+					"s",
+				}),
+			},
+			formatting = {
+				fields = { "kind", "abbr", "menu" },
+				format = function(entry, vim_item)
+					-- Kind icons
+					vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+					-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
+					vim_item.menu = ({
+						codeium = "AI",
+						nvim_lsp = "LSP",
+						luasnip = "Snippet",
+						buffer = "Buffer",
+						path = "Path",
+					})[entry.source.name]
+					return vim_item
+				end,
+			},
+			sources = {
+				{ name = "codeium" },
+				{ name = "nvim_lsp" },
+				{ name = "luasnip" },
+				{ name = "buffer" },
+				{ name = "path" },
+			},
+			confirm_opts = {
+				behavior = cmp.ConfirmBehavior.Replace,
+				select = false,
+			},
+			window = {
+				documentation = {
+					border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+				},
+			},
+			experimental = {
+				ghost_text = false,
+				native_menu = false,
+			},
+		})
+		cmp.setup.cmdline(":", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = cmp.config.sources({
+				{ name = "path" },
+			}, {
+				{
+					name = "cmdline",
+					option = {
+						ignore_cmds = { "Man", "!" },
+					},
+				},
+			}),
+		})
+		cmp.setup.cmdline("/", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = {
+				{ name = "buffer" },
+			},
+		})
