@@ -18,14 +18,16 @@ map("n", "K", ":lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
 map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 -- map("n", "<leader>S", ":BufferLineCyclePrev<cr>", { desc = "Prev buffer", silent = true })
 map("n", "<leader>ih", ":lua vim.lsp.inlay_hint.enable(0,nil)<CR>", { desc = "Toggle Inlay Hints", silent = true })
-map("n", "<leader>s", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
+map("n", "	", ":BufferLineCycleNext<cr>", { desc = "Next buffer", silent = true })
 map("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffers", silent = true })
+map("n", "<leader>bm", ":BufferLineMoveNext<CR>", { desc = "Change buffer position", silent = true })
 map("n", "<leader>k", ":lua vim.lsp.buf.definition()<CR>", { desc = "Show definition" })
 map("n", ":Q", ":q", { noremap = true })
 map("n", "<leader>fd", ":lua vim.lsp.buf.format{timeout_ms = 12000}<CR>", { desc = "Format" })
 map("n", "p", "P", { noremap = true })
 map("n", "yy", "0y$", { noremap = true })
 map("n", "<leader>a", "gg0vG$", { desc = "highlight entire document" })
+map("n", "<leader>l", ":Lazy<CR>", { desc = "Lazy UI", silent = true})
 map("n", "<leader>vs", ":VimGameSnake<CR>", { desc = "Play Vim Snake" })
 map("n", "<leader>ss", ":echo g:VimSnakeScore<CR>", { desc = "See Snake score" })
 map("n", "<leader>ga", ":G add .<CR>", { desc = "git add your changes", silent = true })
@@ -81,15 +83,15 @@ map(
     { desc = "colorschemes", silent = true }
 )
 map("n", "<leader>tf", ":Telescope file_browser<CR>", { desc = "File pick", silent = true })
-map("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-    desc = "Search current word",
-})
-map("v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', {
-    desc = "Search current word",
-})
-map("n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-    desc = "Search on current file",
-})
+-- map("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+--     desc = "Search current word",
+-- })
+-- map("v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', {
+--     desc = "Search current word",
+-- })
+-- map("n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+--     desc = "Search on current file",
+-- })
 map({ "n", "v" }, "<leader>ca", function()
     require("fzf-lua").lsp_code_actions({
         winopts = {

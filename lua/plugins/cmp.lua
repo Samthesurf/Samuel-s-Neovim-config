@@ -11,7 +11,5 @@ return {
 		"L3MON4D3/LuaSnip",
 		"rafamadriz/friendly-snippets",
 	},
-	-- event = "BufReadPre",
-	config = function()
-			end,
+	event = "BufReadPre",
 }
