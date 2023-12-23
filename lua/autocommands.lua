@@ -31,4 +31,4 @@ vim.cmd([[au BufEnter * :ColorizerToggle]])
 -- Format Python files on save
 vim.cmd([[au BufWritePre *.py :lua vim.lsp.buf.format{timeout_ms = 10000}]])
 -- Format Lua files on save
--- vim.cmd([[au BufWritePre *.lua :lua vim.lsp.buf.format{timeout_ms = 10000}]])
+vim.cmd([[au BufWritePre *.lua :lua vim.lsp.buf.format{timeout_ms = 10000}]])
