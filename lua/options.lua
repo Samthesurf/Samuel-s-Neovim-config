@@ -51,5 +51,6 @@ hi SpellLocal guisp=orange gui=undercurl term=underline cterm=undercurl
 
 set spell
 ]]
+vim.g.transparent_enabled = true
 
 

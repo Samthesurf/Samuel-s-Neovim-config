@@ -1,12 +1,5 @@
 return {
 	{
-		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate",
-	},
-	{
-		"nvim-tree/nvim-web-devicons",
-	},
-	{
 		"folke/trouble.nvim",
 	},
 	{
@@ -56,15 +49,15 @@ return {
 	},
 	{
 		"CRAG666/code_runner.nvim",
-		config = function ()
-		  require("code_runner").setup({})
+		config = function()
+			require("code_runner").setup({})
 		end,
 	},
 	{
 		"CRAG666/betterTerm.nvim",
-        config = function()
-            require("betterTerm").setup({})
-        end
+		config = function()
+			require("betterTerm").setup({})
+		end,
 	},
 	{
 		"tpope/vim-fugitive",
@@ -76,11 +69,9 @@ return {
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-context",
-	},
-	{
-		"numToStr/Comment.nvim",
-		opts = {},
-		lazy = false,
+		config = function()
+			require("treesitter-context").setup({})
+		end,
 	},
 	{
 		"folke/zen-mode.nvim",
@@ -89,62 +80,13 @@ return {
 		"RRethy/vim-illuminate",
 	},
 	{
-		"mfussenegger/nvim-dap",
-		keys = {
-			{
-				"<leader>db",
-				mode = "n",
-				":DapToggleBreakpoint<CR>",
-				desc = "Toggle Breakpoint",
-			},
-			{
-				"<leader>dc",
-				mode = "n",
-				":DapContinue<CR>",
-				desc = "Start debugging",
-			},
-			{
-				"<leader>dt",
-				mode = "n",
-				":DapStepOver<CR>",
-				desc = "Step Over",
-			},
-		},
-	},
-	{
-		"mfussenegger/nvim-dap-python",
-		ft = "python",
-		dependencies = {
-			"mfussenegger/nvim-dap",
-			"rcarriga/nvim-dap-ui",
-			"theHamsta/nvim-dap-virtual-text",
-		},
-	},
-	{
-		"nvimtools/none-ls.nvim",
-		event = "VeryLazy",
-	},
-	{
-		"rcarriga/nvim-dap-ui",
-		dependencies = "mfussenegger/nvim-dap",
-		config = function()
-			local dap = require("dap")
-			local dapui = require("dapui")
-			dapui.setup()
-			dap.listeners.after.event_initialized["dapui_config"] = function()
-				dapui.open()
-			end
-			dap.listeners.before.event_terminated["dapui_config"] = function()
-				dapui.close()
-			end
-			dap.listeners.before.event_exited["dapui_config"] = function()
-				dapui.close()
-			end
-		end,
-	},
-	{
 		"folke/neodev.nvim",
 		opts = {},
+		config = function()
+			require("neodev").setup({
+				library = { plugins = { "nvim-dap-ui" }, types = true },
+			})
+		end,
 	},
 	{
 		"folke/persistence.nvim",
@@ -152,9 +94,6 @@ return {
 		opts = {
 			-- add any custom options here
 		},
-	},
-	{
-		"JoosepAlviste/nvim-ts-context-commentstring",
 	},
 	{
 		"iamcco/markdown-preview.nvim",
@@ -169,20 +108,10 @@ return {
 		},
 	},
 	{
-		"petertriho/nvim-scrollbar",
-	},
-	{
-		-- "MunifTanjim/nui.nvim",
-	},
-	{
 		"rcarriga/nvim-notify",
 	},
 	{
 		"xiyaowong/transparent.nvim",
-	},
-	{
-		"nvim-telescope/telescope-dap.nvim",
-		enabled = false,
 	},
 	{
 		"christoomey/vim-tmux-navigator",
@@ -207,11 +136,6 @@ return {
 		event = "VeryLazy",
 	},
 	{
-		"theHamsta/nvim-dap-virtual-text",
-		dependencies = { "mfussenegger/nvim-dap", "nvim-treesitter/nvim-treesitter" },
-		event = "VeryLazy",
-	},
-	{
 		"norcalli/nvim-colorizer.lua",
 	},
 	{
@@ -232,16 +156,14 @@ return {
 	},
 	{
 		"simrat39/rust-tools.nvim",
+		config = function()
+			require("rust-tools").setup({})
+		end,
 	},
 	{
 		"chrisgrieser/nvim-genghis",
 	},
-	{
-		"ibhagwan/fzf-lua",
-	},
-	{
-		"lewis6991/hover.nvim",
-	},
+	{},
 	{
 		"smjonas/inc-rename.nvim",
 		config = function()
