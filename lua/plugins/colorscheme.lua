@@ -12,13 +12,13 @@ return {
 		{
 			"marko-cerovac/material.nvim",
 			event = "VeryLazy",
-            config = function()
-                require("material").setup({
-                    disable = {
-                        background = true,
-                    }
-                })
-            end
+			config = function()
+				require("material").setup({
+					disable = {
+						background = true,
+					},
+				})
+			end,
 		},
 		{
 			"rebelot/kanagawa.nvim",
@@ -37,11 +37,15 @@ return {
 					style = "warmer",
 					-- transparent = true,
 				})
-                vim.cmd.colorscheme "onedark"
+				-- vim.cmd.colorscheme "onedark"
 			end,
 		},
 		{
 			"CantoroMC/ayu-nvim",
+			config = function()
+				-- vim.g.ayu_avoid_italics = true
+				-- vim.g.ayu_mirage = true
+			end,
 		},
 		{
 			"fynnfluegge/monet.nvim",
@@ -50,7 +54,7 @@ return {
 				require("monet").setup({
 					-- transparent_background = true,
 				})
-				-- vim.cmd([[colorscheme monet]])
+				vim.cmd([[colorscheme monet]])
 			end,
 		},
 		{
@@ -59,6 +63,7 @@ return {
 			priority = 1000,
 			config = function()
 				require("catppuccin").setup({ flavour = "macchiato" })
+				-- vim.cmd.colorscheme "catppuccin-mocha"
 			end,
 		},
 	},
