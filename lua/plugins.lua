@@ -11,9 +11,6 @@ return {
 		config = true,
 	},
 	{
-		"folke/which-key.nvim",
-	},
-	{
 		"folke/flash.nvim",
 		-- enabled = false,
 		event = "VeryLazy",
@@ -43,6 +40,9 @@ return {
 	},
 	{
 		"lewis6991/gitsigns.nvim",
+		config = function()
+			require("gitsigns").setup({})
+		end,
 	},
 	{
 		--"neoclide/coc.nvim", branch = 'release',
@@ -100,14 +100,6 @@ return {
 		event = "VeryLazy",
 	},
 	{
-		"folke/noice.nvim",
-		event = "VeryLazy",
-		dependencies = { "rcarriga/nvim-notify", "MunifTanjim/nui.nvim" },
-		opts = {
-			-- add any options here
-		},
-	},
-	{
 		"rcarriga/nvim-notify",
 	},
 	{
@@ -137,6 +129,9 @@ return {
 	},
 	{
 		"norcalli/nvim-colorizer.lua",
+		config = function()
+			require("colorizer").setup({})
+		end,
 	},
 	{
 		"Exafunction/codeium.nvim",
