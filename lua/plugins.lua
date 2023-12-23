@@ -158,7 +158,6 @@ return {
 	{
 		"chrisgrieser/nvim-genghis",
 	},
-	{},
 	{
 		"smjonas/inc-rename.nvim",
 		config = function()
