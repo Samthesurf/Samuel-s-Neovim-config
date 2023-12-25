@@ -10,13 +10,10 @@ return {
 					},
 				},
 			})
-			nvim_lsp.bashls.setup({})
-			nvim_lsp.emmet_language_server.setup({})
-			nvim_lsp.cssls.setup({})
-			nvim_lsp.tsserver.setup({})
-			nvim_lsp.jsonls.setup({})
-			nvim_lsp.ruff_lsp.setup({})
-			nvim_lsp.biome.setup({})
+            local servers = { "bashls", "emmet_language_server", "cssls", "tsserver", "jsonls", "ruff_lsp", "biome" }
+            for _, lsp in ipairs(servers) do
+                nvim_lsp[lsp].setup({})
+            end
 			--Enable (broadcasting) snippet capability for completion
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities.textDocument.completion.completionItem.snippetSupport = true

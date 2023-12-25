@@ -150,10 +150,9 @@ return {
 		-- "aikooo7/funnyfiles.nvim",
 	},
 	{
-		"simrat39/rust-tools.nvim",
-		config = function()
-			require("rust-tools").setup({})
-		end,
+        "mrcjkb/rustaceanvim",
+        version = "^3", --Recommended
+        ft = {"rust"},
 	},
 	{
 		"chrisgrieser/nvim-genghis",

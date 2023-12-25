@@ -1,5 +1,4 @@
 require("lazyinstall")
-require("opts")
 require("keymaps")
 require("plugins")
 require("autocommands")

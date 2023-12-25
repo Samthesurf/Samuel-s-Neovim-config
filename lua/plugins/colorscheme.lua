@@ -65,6 +65,11 @@ return {
 				require("catppuccin").setup({ flavour = "macchiato" })
 				-- vim.cmd.colorscheme "catppuccin-mocha"
 			end,
-		},
+		},{
+            "sainnhe/gruvbox-material",
+            config = function()
+                -- vim.cmd.colorscheme "gruvbox-material"
+            end
+    }
 	},
 }
