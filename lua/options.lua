@@ -20,7 +20,7 @@ if vim.g.neovide then
 	vim.g.neovide_transparency = 0.65
 	vim.g.neovide_background_color = "#1f528f"
 end
--- vim.api.nvim_set_var("mapleader", " ")
+vim.api.nvim_set_var("maplocalleader", " ")
 -- Change diagnostic signs.
 vim.diagnostic.config({
         signs = {

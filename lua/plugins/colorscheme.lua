@@ -10,15 +10,15 @@ return {
 			"EdenEast/nightfox.nvim",
 		},
 		{
-			"marko-cerovac/material.nvim",
-			event = "VeryLazy",
-			config = function()
-				require("material").setup({
-					disable = {
-						background = true,
-					},
-				})
-			end,
+            "ray-x/starry.nvim",
+            config = function()
+                require("starry").setup({
+                    disable = {
+                        background = true,
+                    },
+                })
+                    -- vim.cmd([[colorscheme starry]])
+            end
 		},
 		{
 			"rebelot/kanagawa.nvim",
