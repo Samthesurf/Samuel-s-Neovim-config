@@ -162,5 +162,7 @@ return {
 		config = function()
 			require("inc_rename").setup()
 		end,
-	},
+	},{
+        "mg979/vim-visual-multi",
+    }
 }

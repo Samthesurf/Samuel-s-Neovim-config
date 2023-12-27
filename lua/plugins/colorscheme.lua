@@ -10,15 +10,15 @@ return {
 			"EdenEast/nightfox.nvim",
 		},
 		{
-            "ray-x/starry.nvim",
-            config = function()
-                require("starry").setup({
-                    disable = {
-                        background = true,
-                    },
-                })
-                    -- vim.cmd([[colorscheme starry]])
-            end
+			"ray-x/starry.nvim",
+			config = function()
+				require("starry").setup({
+					disable = {
+						background = true,
+					},
+				})
+				-- vim.cmd([[colorscheme starry]])
+			end,
 		},
 		{
 			"rebelot/kanagawa.nvim",
@@ -52,7 +52,7 @@ return {
 			name = "monet",
 			config = function()
 				require("monet").setup({
-					-- transparent_background = true,
+					transparent_background = true,
 				})
 				vim.cmd([[colorscheme monet]])
 			end,
@@ -65,11 +65,12 @@ return {
 				require("catppuccin").setup({ flavour = "macchiato" })
 				-- vim.cmd.colorscheme "catppuccin-mocha"
 			end,
-		},{
-            "sainnhe/gruvbox-material",
-            config = function()
-                -- vim.cmd.colorscheme "gruvbox-material"
-            end
-    }
+		},
+		{
+			"sainnhe/gruvbox-material",
+			config = function()
+				-- vim.cmd.colorscheme "gruvbox-material"
+			end,
+		},
 	},
 }

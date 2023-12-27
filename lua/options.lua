@@ -33,7 +33,7 @@ vim.diagnostic.config({
         }
     })
 -- map('n','x','_x',{desc = "delete without yanking"})
-vim.o.completeopt = "menuone,noselect"
+opt.completeopt = "menu,menuone,noselect"
 opt.cursorline = true
 opt.smartcase = true
 opt.clipboard:append("unnamedplus")
@@ -51,6 +51,6 @@ hi SpellLocal guisp=orange gui=undercurl term=underline cterm=undercurl
 
 set spell
 ]]
-vim.g.transparent_enabled = true
+vim.g.transparent_enabled = false
 
 
