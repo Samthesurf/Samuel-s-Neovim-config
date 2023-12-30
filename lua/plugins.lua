@@ -150,9 +150,9 @@ return {
 		-- "aikooo7/funnyfiles.nvim",
 	},
 	{
-        "mrcjkb/rustaceanvim",
-        version = "^3", --Recommended
-        ft = {"rust"},
+		"mrcjkb/rustaceanvim",
+		version = "^3", --Recommended
+		ft = { "rust" },
 	},
 	{
 		"chrisgrieser/nvim-genghis",
@@ -162,7 +162,24 @@ return {
 		config = function()
 			require("inc_rename").setup()
 		end,
+	},
+	{
+		"mg979/vim-visual-multi",
+	},
+	{
+		"kosayoda/nvim-lightbulb",
+		config = function()
+			require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
+		end,
 	},{
-        "mg979/vim-visual-multi",
+        "roobert/activate.nvim",
+        dependencies = {"nvim-telescope/telescope.nvim"},
+        keys = {
+            {
+                "<leader>P",
+                '<Cmd>lua require"activate".list_plugins()<CR>',
+                desc = "Plugins",
+            }
+        }
     }
 }
