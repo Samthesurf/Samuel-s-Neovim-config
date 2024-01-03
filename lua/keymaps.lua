@@ -103,17 +103,10 @@ map({ "n", "v" }, "<leader>ca", function()
         },
     })
 end, { desc = "Code actions" })
-map(
-    "n",
-    "<leader>e",
-    ":Neotree filesystem reveal right toggle<CR>",
-    { desc = "file explorer", noremap = true, silent = true }
-)
-map("n", "\\", ":Neotree right<CR>", { desc = "file explorer 1", noremap = true, silent = true })
+
 map("n", "<leader>eg", ":Neotree git_status toggle<CR>", { desc = "file git status", noremap = true, silent = true })
 map("n", "i", "a")
 -- <A means alt
-map("n", "<A-r>", ":RunCode<CR>:starti<CR>", { noremap = true, silent = true })
 map("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
 map("n", "<leader>n", ":New<CR>", { desc = "Create new file", silent = true })
 map("n", "<leader>tt", function()

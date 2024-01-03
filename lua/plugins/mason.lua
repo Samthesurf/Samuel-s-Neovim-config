@@ -1,6 +1,7 @@
 return {
 	{
 		"williamboman/mason.nvim",
+        cmd = {"Mason","MasonInstallAll","MasonInstall"},
 		dependencies = { "williamboman/mason-lspconfig.nvim" },
 		opts = function()
 			ensure_installed = {

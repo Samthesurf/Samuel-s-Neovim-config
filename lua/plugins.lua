@@ -49,15 +49,12 @@ return {
 	},
 	{
 		"CRAG666/code_runner.nvim",
+		cmd = "RunCode",
+		keys = { { "<A-r>", ":RunCode<CR>:starti<CR>", desc = "Run the Code" } },
 		config = function()
 			require("code_runner").setup({})
 		end,
-	},
-	{
-		"CRAG666/betterTerm.nvim",
-		config = function()
-			require("betterTerm").setup({})
-		end,
+		dependencies = { "CRAG666/betterTerm.nvim" },
 	},
 	{
 		"tpope/vim-fugitive",
@@ -75,6 +72,7 @@ return {
 	},
 	{
 		"folke/zen-mode.nvim",
+		cmd = "ZenMode",
 	},
 	{
 		"RRethy/vim-illuminate",
@@ -82,6 +80,7 @@ return {
 	{
 		"folke/neodev.nvim",
 		opts = {},
+		ft = { "lua", "vim" },
 		config = function()
 			require("neodev").setup({
 				library = { plugins = { "nvim-dap-ui" }, types = true },
@@ -97,7 +96,7 @@ return {
 	},
 	{
 		"iamcco/markdown-preview.nvim",
-		event = "VeryLazy",
+		ft = { "markdown" },
 	},
 	{
 		"rcarriga/nvim-notify",
@@ -110,6 +109,7 @@ return {
 	},
 	{
 		"907th/vim-auto-save",
+		event = "BufReadPre",
 	},
 	{
 		-- "stevearc/conform.nvim",
@@ -135,6 +135,7 @@ return {
 	},
 	{
 		"Exafunction/codeium.nvim",
+		event = "BufReadPre",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"hrsh7th/nvim-cmp",
@@ -159,27 +160,31 @@ return {
 	},
 	{
 		"smjonas/inc-rename.nvim",
+		event = "BufReadPre",
 		config = function()
 			require("inc_rename").setup()
 		end,
 	},
 	{
 		"mg979/vim-visual-multi",
+		event = "BufReadPre",
 	},
 	{
 		"kosayoda/nvim-lightbulb",
+		event = "BufReadPre",
 		config = function()
 			require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
 		end,
-	},{
-        "roobert/activate.nvim",
-        dependencies = {"nvim-telescope/telescope.nvim"},
-        keys = {
-            {
-                "<leader>P",
-                '<Cmd>lua require"activate".list_plugins()<CR>',
-                desc = "Plugins",
-            }
-        }
-    }
+	},
+	{
+		"roobert/activate.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+		keys = {
+			{
+				"<leader>P",
+				'<Cmd>lua require"activate".list_plugins()<CR>',
+				desc = "Plugins",
+			},
+		},
+	},
 }

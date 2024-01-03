@@ -16,7 +16,7 @@ opt.expandtab = true
 opt.termguicolors = true
 opt.guifont = "JetBrainsMono Nerd Font:h10:b"
 if vim.g.neovide then
-	opt.guifont = "JetBrainsMono Nerd Font:h11:b"
+	opt.guifont = "JetBrainsMono Nerd Font:h10.5:b"
 	vim.g.neovide_transparency = 0.65
 	vim.g.neovide_background_color = "#1f528f"
 end

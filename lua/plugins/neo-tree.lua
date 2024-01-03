@@ -1,5 +1,18 @@
 return {
 	"nvim-neo-tree/neo-tree.nvim",
+	cmd = { "Neotree", "Neotree right" },
+	keys = {
+		{
+			"\\",
+			[[<cmd>Neotree right<cr>]],
+			desc = "File explorer 1",
+		},
+		{
+			"<leader>e",
+			":Neotree filesystem reveal right toggle<CR>",
+			{ desc = "file explorer", noremap = true, silent = true },
+		},
+	},
 	branch = "v3.x",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
