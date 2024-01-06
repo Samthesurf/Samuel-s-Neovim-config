@@ -1,7 +1,7 @@
 return {
 	{
 		"neovim/nvim-lspconfig",
-        event = "BufReadPre",
+        -- event = "BufReadPre",
 		config = function()
 			local nvim_lsp = require("lspconfig")
 			nvim_lsp.pyright.setup({
