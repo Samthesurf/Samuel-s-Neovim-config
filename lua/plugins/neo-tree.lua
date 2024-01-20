@@ -1,5 +1,6 @@
 return {
 	"nvim-neo-tree/neo-tree.nvim",
+    event = "VimEnter",
 	cmd = { "Neotree", "Neotree right" },
 	keys = {
 		{
