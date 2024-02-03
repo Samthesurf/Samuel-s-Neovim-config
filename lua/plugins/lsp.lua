@@ -11,7 +11,7 @@ return {
 					},
 				},
 			})
-            local servers = { "bashls", "emmet_language_server", "cssls", "tsserver", "jsonls", "ruff_lsp", "biome" }
+            local servers = { "bashls", "emmet_language_server", "cssls", "tsserver", "jsonls", "ruff_lsp", "biome", "jdtls" }
             for _, lsp in ipairs(servers) do
                 nvim_lsp[lsp].setup({})
             end

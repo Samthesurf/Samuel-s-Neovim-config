@@ -25,6 +25,8 @@ augroup exe_code
     \ :w<CR>:TermExec cmd="clang++ % -o %:r;./%:r" direction=float <CR>
     autocmd FileType c noremap <buffer> <F4>
     \ :w<CR>:TermExec cmd="clang % -o %:r;./%:r" direction=float <CR>
+    autocmd FileType java noremap <buffer> <F4>
+    \ :w<CR>:TermExec cmd="javac %;java %:r" size=20<CR>:wincmd j<CR>:starti<CR>
 augroup END
 ]])
 vim.cmd([[au BufEnter * :ColorizerToggle]])

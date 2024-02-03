@@ -109,6 +109,7 @@ map("n", "i", "a")
 -- <A means alt
 map("n", "<leader>d", ":bw!<CR>", { desc = "delete tab", silent = true })
 map("n", "<leader>n", ":New<CR>", { desc = "Create new file", silent = true })
+map("n","<leader>nd","<cmd>NoiceDismiss<CR>", {desc = "delete Noice notification", silent = true})
 map("n", "<leader>tt", function()
     require("trouble").open()
 end, { desc = "Trouble" })

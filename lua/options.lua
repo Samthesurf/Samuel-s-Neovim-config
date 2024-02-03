@@ -1,6 +1,6 @@
 local opt = vim.opt
 local map = vim.keymap.set
-vim.o.mouse = ""
+vim.o.mouse = "a"
 opt.number = true
 opt.relativenumber = true
 vim.o.splitbelow = true
