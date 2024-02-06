@@ -1,8 +1,11 @@
 return {
 	{
 		"williamboman/mason.nvim",
-        cmd = {"Mason","MasonInstallAll","MasonInstall"},
-		dependencies = { "williamboman/mason-lspconfig.nvim" },
+		cmd = { "Mason", "MasonInstallAll", "MasonInstall" },
+		dependencies = {
+			"williamboman/mason-lspconfig.nvim",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
+		},
 		opts = function()
 			ensure_installed = {
 				"pyright",
@@ -21,6 +24,13 @@ return {
 			return ensure_installed
 		end,
 		config = function()
+			require("java").setup()
+			local mason_lspconfig = require("mason-lspconfig")
+
+			local mason_tool_installer = require("mason-tool-installer")
+			mason_lspconfig.setup({
+				automatic_installation = true,
+			})
 			require("mason").setup({
 				ui = {
 					icons = {
@@ -28,6 +38,11 @@ return {
 						package_pending = "➜",
 						package_uninstalled = "✗",
 					},
+				},
+			})
+			mason_tool_installer.setup({
+				ensure_installed = {
+					"openjdk-17",
 				},
 			})
 			vim.api.nvim_create_user_command("MasonInstallAll", function()
