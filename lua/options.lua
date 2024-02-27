@@ -15,6 +15,7 @@ opt.smartindent = true
 opt.expandtab = true
 opt.termguicolors = true
 opt.guifont = "JetBrainsMono Nerd Font:h10:b"
+vim.o.mousemoveevent = true
 if vim.g.neovide then
 	opt.guifont = "JetBrainsMono Nerd Font:h10.5:b"
 	vim.g.neovide_transparency = 0.65
@@ -52,5 +53,5 @@ hi SpellLocal guisp=orange gui=undercurl term=underline cterm=undercurl
 set spell
 ]]
 vim.g.transparent_enabled = false
-
+--require("eagle").setup({})
 

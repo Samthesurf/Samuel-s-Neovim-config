@@ -9,7 +9,7 @@ return {
 				-- require('hover.providers.gh_user')
 				-- require('hover.providers.jira')
 				-- require('hover.providers.man')
-				require("hover.providers.dictionary")
+				-- require("hover.providers.dictionary")
 			end,
 			preview_opts = {
 				border = "single",
@@ -27,9 +27,8 @@ return {
 		-- Setup keymaps
 		-- map("n", "K", require("hover").hover, {desc = "hover.nvim"})
 		map("n", "gK", require("hover").hover_select, { desc = "hover.nvim (select)" })
-
+        vim.o.mousemoveevent = true
 		-- Mouse support
 		map("n", "<MouseMove>", require("hover").hover_mouse, { desc = "hover.nvim (mouse)" })
-		vim.o.mousemoveevent = true
 	end,
 }

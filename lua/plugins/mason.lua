@@ -23,7 +23,7 @@ return {
 			}
 			return ensure_installed
 		end,
-		config = function()
+		config = function(_, optsi)
 			require("java").setup()
 			local mason_lspconfig = require("mason-lspconfig")
 
@@ -31,8 +31,14 @@ return {
 			mason_lspconfig.setup({
 				automatic_installation = true,
 			})
-			require("mason").setup({
+			vim.print(optsi)
+			-- import mason
+			local mason = require("mason")
+
+			local conf = vim.tbl_deep_extend("keep", optsi, {
+                -- ensure_installed = settings.formatters_linters,
 				ui = {
+                    border = "double",
 					icons = {
 						package_installed = "✓",
 						package_pending = "➜",
@@ -40,6 +46,9 @@ return {
 					},
 				},
 			})
+
+			-- enable mason and configure icons
+			mason.setup(conf)
 			mason_tool_installer.setup({
 				ensure_installed = {
 					"openjdk-17",
