@@ -7,16 +7,16 @@ return {
         require("bufferline").setup({
             options = {
                 hover = {
-                    enabled = true,
-                    delay = 200,
-                    reveal = { "close" },
+                    -- enabled = true,
+                    -- delay = 200,
+                    -- reveal = { "close" },
                 },
                 diagnostics = "nvim_lsp",
                 diagnostics_indicator = function(count, level)
                     local icon = level:match("error") and " " or ""
                     return " " .. icon .. " " .. count
                 end,
-                separator_style = "slant",
+                -- separator_style = "slant",
                 offsets = {
                     {
                         filetype = "neo-tree",

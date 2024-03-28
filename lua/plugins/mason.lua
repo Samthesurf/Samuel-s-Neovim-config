@@ -24,14 +24,14 @@ return {
 			return ensure_installed
 		end,
 		config = function(_, optsi)
-			require("java").setup()
+			-- require("java").setup()
 			local mason_lspconfig = require("mason-lspconfig")
 
 			local mason_tool_installer = require("mason-tool-installer")
 			mason_lspconfig.setup({
 				automatic_installation = true,
 			})
-			vim.print(optsi)
+			-- vim.print(optsi)
 			-- import mason
 			local mason = require("mason")
 

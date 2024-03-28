@@ -1,7 +1,7 @@
 return {
 	{
 		"neovim/nvim-lspconfig",
-        -- event = "BufReadPre",
+		-- event = "BufReadPre",
 		config = function()
 			local nvim_lsp = require("lspconfig")
 			nvim_lsp.pyright.setup({
@@ -11,10 +11,10 @@ return {
 					},
 				},
 			})
-            local servers = { "bashls", "emmet_language_server", "cssls", "tsserver", "jsonls", "ruff_lsp", "biome", "jdtls" }
-            for _, lsp in ipairs(servers) do
-                nvim_lsp[lsp].setup({})
-            end
+			local servers = { "bashls", "emmet_language_server", "cssls", "tsserver", "jsonls", "ruff_lsp", "biome","jdtls" }
+			for _, lsp in ipairs(servers) do
+				nvim_lsp[lsp].setup({})
+			end
 			--Enable (broadcasting) snippet capability for completion
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -65,6 +65,14 @@ return {
 				cmd = { "gopls", "serve" },
 				filetypes = { "go" },
 			})
+			-- nvim_lsp.java_language_server.setup({
+			-- 	cmd = {
+			-- 		"/home/samuelsurf/.local/share/nvim/mason/packages/java-language-server/dist/lang_server_linux.sh",
+			-- 	},
+			-- 	root_dir = {
+			-- 		vim.fn.getcwd(),
+			-- 	},
+			-- })
 		end,
 	},
 }
