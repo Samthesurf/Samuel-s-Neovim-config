@@ -1,42 +1,54 @@
 return {
-	"b0o/incline.nvim",
-	name = "incline",
-	-- version = "*",
-	dependencies = { "SmiteshP/nvim-navic", "nvim-tree/nvim-web-devicons" },
-	config = function()
-		local helpers = require("incline.helpers")
-		local navic = require("nvim-navic")
-		local devicons = require("nvim-web-devicons")
-		require("incline").setup({
-			window = {
-				padding = 0,
-				margin = { horizontal = 0, vertical = 0 },
-			},
-			render = function(props)
-				local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
-				if filename == "" then
-					filename = "[No Name]"
-				end
-				local ft_icon, ft_color = devicons.get_icon_color(filename)
-				local modified = vim.bo[props.buf].modified
-				local res = {
-					ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
-					" ",
-					{ filename, gui = modified and "bold,italic" or "bold" },
-					guibg = "#44406e",
-				}
-				if props.focused then
-					for _, item in ipairs(navic.get_data(props.buf) or {}) do
-						table.insert(res, {
-							{ " > ", group = "NavicSeparator" },
-							{ item.icon, group = "NavicIcons" .. item.type },
-							{ item.name, group = "NavicText" },
-						})
-					end
-				end
-				table.insert(res, " ")
-				return res
-			end,
-		})
-	end,
+        "utilyre/barbecue.nvim",
+        name = "barbecue",
+        version = "*",
+        dependencies = { "SmiteshP/nvim-navic", "nvim-tree/nvim-web-devicons" },
+        config = function()
+                require("barbecue").setup({
+                        theme = {
+                                -- this highlight is used to override other highlights
+                                -- you can take advantage of its bg and set a background throughout your winbar
+                                -- (e.g. basename will look like this: { fg = "#c0caf5", bold = true })
+                                normal = { fg = "#c0caf5" },
+
+                                -- these highlights correspond to symbols table from config
+                                ellipsis = { fg = "#737aa2" },
+                                separator = { fg = "#737aa2" },
+                                modified = { fg = "#737aa2" },
+
+                                -- these highlights represent the _text_ of three main parts of barbecue
+                                dirname = { fg = "#737aa2" },
+                                basename = { bold = true },
+                                context = {},
+
+                                -- these highlights are used for context/navic icons
+                                context_file = { fg = "#ac8fe4" },
+                                context_module = { fg = "#ac8fe4" },
+                                context_namespace = { fg = "#ac8fe4" },
+                                context_package = { fg = "#ac8fe4" },
+                                context_class = { fg = "#ac8fe4" },
+                                context_method = { fg = "#ac8fe4" },
+                                context_property = { fg = "#ac8fe4" },
+                                context_field = { fg = "#ac8fe4" },
+                                context_constructor = { fg = "#ac8fe4" },
+                                context_enum = { fg = "#ac8fe4" },
+                                context_interface = { fg = "#ac8fe4" },
+                                context_function = { fg = "#ac8fe4" },
+                                context_variable = { fg = "#ac8fe4" },
+                                context_constant = { fg = "#ac8fe4" },
+                                context_string = { fg = "#ac8fe4" },
+                                context_number = { fg = "#ac8fe4" },
+                                context_boolean = { fg = "#ac8fe4" },
+                                context_array = { fg = "#ac8fe4" },
+                                context_object = { fg = "#ac8fe4" },
+                                context_key = { fg = "#ac8fe4" },
+                                context_null = { fg = "#ac8fe4" },
+                                context_enum_member = { fg = "#ac8fe4" },
+                                context_struct = { fg = "#ac8fe4" },
+                                context_event = { fg = "#ac8fe4" },
+                                context_operator = { fg = "#ac8fe4" },
+                                context_type_parameter = { fg = "#ac8fe4" },
+                        },
+                })
+        end,
 }

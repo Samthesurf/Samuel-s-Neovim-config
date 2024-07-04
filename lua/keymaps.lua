@@ -82,7 +82,7 @@ map(
     [[<cmd>lua require("fzf-lua").setup({'default'})<CR>:FzfLua colorschemes<CR>]],
     { desc = "colorschemes", silent = true }
 )
-map("n", "<leader>tf", ":Telescope file_browser<CR>", { desc = "File pick", silent = true })
+-- map("n", "<leader>tf", ":Telescope file_browser<CR>", { desc = "File pick", silent = true })
 -- map("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
 --     desc = "Search current word",
 -- })

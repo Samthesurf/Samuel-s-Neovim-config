@@ -20,7 +20,7 @@ return {
             dashboard.button("f", " " .. " Find file",
                 [[<cmd> lua require("fzf-lua").setup({'fzf-vim'})<CR>:Files <CR>]]),
             dashboard.button("n", " " .. " New file", "<cmd> New<cr>"),
-            dashboard.button("b", " " .. " Folder browser", "<cmd> Telescope file_browser<cr>"),
+            dashboard.button("b", " " .. " Folder browser", "<cmd> lua require('yazi').yazi()<cr>"),
             dashboard.button("r", " " .. " Recent files", "<cmd> Telescope oldfiles <cr>"),
             dashboard.button("g", " " .. " Find text", "<cmd> Telescope live_grep <cr>"),
             dashboard.button("c", " " .. " Config", "<cmd> e $MYVIMRC <cr>"),

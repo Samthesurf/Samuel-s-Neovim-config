@@ -1,0 +1,33 @@
+local function lspinfo()
+	local msg = "No Active Lsp"
+	local buf_ft = vim.bo.filetype
+	local clients = vim.lsp.get_clients()
+	if next(clients) == nil then
+		return msg
+	end
+	local active_clients = {}
+	for _, client in ipairs(clients) do
+		local filetypes = client.config.filetypes
+		if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+			table.insert(active_clients, client.name)
+		end
+	end
+	if #active_clients > 0 then
+		return table.concat(active_clients, ", ")
+	else
+		return msg
+	end
+end
+
+local lspinfo_component = {
+	function()
+		return lspinfo()
+	end,
+	icon = " LSP:",
+	color = { fg = "#87ceeb", gui = "bold" },
+}
+local function surfer()
+	return [[SamuelSurf]]
+end
+
+

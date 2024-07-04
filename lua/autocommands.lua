@@ -29,6 +29,10 @@ augroup exe_code
     \ :w<CR>:TermExec cmd="javac %;java %:r" size=20<CR>:wincmd j<CR>:starti<CR>
     autocmd FileType go noremap <buffer> <F4>
     \ :w<CR>:TermExec cmd="go run %" size=20<CR>:wincmd j<CR>:starti<CR>
+    autocmd FileType asm noremap <buffer> <F4>
+    \ :w<CR>:TermExec cmd="nasm -f elf64 -o %:r.o %;ld -o %:r %:r.o;./%:r" direction=float <CR>
+    autocmd FileType dart noremap <buffer> <F4>
+    \ :TermExec cmd="dart run %" size=60 direction=vertical <CR>
 augroup END
 ]])
 vim.cmd([[au BufEnter * :ColorizerToggle]])

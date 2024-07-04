@@ -5,13 +5,28 @@ return {
 		config = function()
 			local nvim_lsp = require("lspconfig")
 			nvim_lsp.pyright.setup({
-				python = {
-					analysis = {
-						"openFilesOnly",
+				settings = {
+					pyright = {
+						disableOrganizeImports = true,
+					},
+					python = {
+						analysis = {
+							"openFilesOnly",
+						},
 					},
 				},
 			})
-			local servers = { "bashls", "emmet_language_server", "cssls", "tsserver", "jsonls", "ruff_lsp", "biome","jdtls" }
+			local servers = {
+				"ruff",
+				"bashls",
+				"emmet_language_server",
+				"cssls",
+				"gopls",
+				"tsserver",
+				"jsonls",
+				"biome",
+				"jdtls",
+			}
 			for _, lsp in ipairs(servers) do
 				nvim_lsp[lsp].setup({})
 			end
@@ -60,19 +75,16 @@ return {
 				},
 				filetypes = { "powershell" },
 			})
-			-- Configure gopls
-			require("lspconfig").gopls.setup({
-				cmd = { "gopls", "serve" },
-				filetypes = { "go" },
+			-- local on_attach = function(client)
+			-- 	if client.name == "ruff" then
+			-- 		client.server_capabilitiies.hoverProvider = false
+			-- 	end
+			-- end
+
+			nvim_lsp.asm_lsp.setup({
+				-- on_attach = on_attach,
+				root_dir = nvim_lsp.util.root_pattern(".asm-lsp.toml", ".git"),
 			})
-			-- nvim_lsp.java_language_server.setup({
-			-- 	cmd = {
-			-- 		"/home/samuelsurf/.local/share/nvim/mason/packages/java-language-server/dist/lang_server_linux.sh",
-			-- 	},
-			-- 	root_dir = {
-			-- 		vim.fn.getcwd(),
-			-- 	},
-			-- })
 		end,
 	},
 }

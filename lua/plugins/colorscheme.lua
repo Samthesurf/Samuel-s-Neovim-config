@@ -54,7 +54,7 @@ return {
 				require("monet").setup({
 					transparent_background = true,
 				})
-				vim.cmd([[colorscheme monet]])
+				-- vim.cmd([[colorscheme monet]])
 			end,
 		},
 		{
@@ -62,14 +62,33 @@ return {
 			name = "catppuccin",
 			priority = 1000,
 			config = function()
-				require("catppuccin").setup({ flavour = "macchiato" })
-				-- vim.cmd.colorscheme "catppuccin-mocha"
+				require("catppuccin").setup({
+					transparent_background = true,
+					-- flavour = "macchiato",
+				})
+				vim.cmd.colorscheme("catppuccin-mocha")
 			end,
 		},
 		{
 			"sainnhe/gruvbox-material",
 			config = function()
 				-- vim.cmd.colorscheme "gruvbox-material"
+			end,
+		},
+		{
+			"scottmckendry/cyberdream.nvim",
+			lazy = false,
+			priority = 1000,
+			config = function()
+				require("cyberdream").setup({
+					-- Recommended - see "Configuring" below for more config options
+					transparent = true,
+					italic_comments = true,
+					hide_fillchars = true,
+					borderless_telescope = true,
+					terminal_colors = true,
+				})
+				-- vim.cmd("colorscheme cyberdream") -- set the colorscheme
 			end,
 		},
 	},

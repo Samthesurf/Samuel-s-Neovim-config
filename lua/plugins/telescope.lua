@@ -38,22 +38,22 @@ return {
 						case_mode = "smart_case", -- or "ignore_case" or "respect_case"
 						-- the default case_mode is "smart_case"
 					},
-					file_browser = {
+					-- file_browser = {
 						-- display_stat = {date = false, size = false, mode = false},
 						-- theme - "ivy",
 						-- select_buffer = true,
-					},
+					-- },
 				},
 			})
 			-- require("telescope").load_extension("undo")
 			require("telescope").load_extension("fzf")
-			require("telescope").load_extension("file_browser")
+			-- require("telescope").load_extension("file_browser")
 			-- require('telescope').load_extension('dap')
 			-- require("telescope.themes").setup{}
 		end,
 	},
 	{
-		"nvim-telescope/telescope-file-browser.nvim",
-		dependencies = "nvim-telescope/telescope.nvim",
+		-- "nvim-telescope/telescope-file-browser.nvim",
+		-- dependencies = "nvim-telescope/telescope.nvim",
 	},
 }
