@@ -11,7 +11,7 @@ return {
       function()
         require("yazi").yazi()
       end,
-      { desc = "Open the yazi file manager" },
+      { desc = "Open yazi file manager" },
     },
     {
       -- Open in the current working directory
