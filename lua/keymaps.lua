@@ -65,7 +65,7 @@ map(
     { desc = "search current dir" }
 )
 map("n", "<leader>wa", ":wqall<CR>", { desc = "Save and exit Neovim" })
-map("n", "<leader>tk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
+map("n", "<leader>tk", ":FzfLua keymaps<CR>", { desc = "Keymaps" })
 map("n", "<C-d>", "<C-d>zz", { desc = "half page up" })
 map("n", "<C-u>", "<C-u>zz", { desc = "half page down" })
 map("n", "<leader>q", ":q<CR>", { desc = "exit", silent = true })
@@ -137,3 +137,6 @@ map("n", "<leader>pl", [[<cmd>lua require("persistence").load({ last = true })<c
 
 -- stop Persistence => session won't be saved on exit
 map("n", "<leader>qd", [[<cmd>lua require("persistence").stop()<cr>]], { desc = "Don't save session" })
+-- Code screenshots
+map("x", "<leader>cc", ":CodeSnap<CR>", {desc = "save screenshots to clipboard"})
+map("x", "<leader>cs", ":CodeSnapSave<CR>", {desc = "save screenshots to ~/Pictures/Code_screenshots/"})

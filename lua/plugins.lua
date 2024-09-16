@@ -191,28 +191,18 @@ return {
 		"nvim-neotest/nvim-nio",
 	},
 	{
-		{ "mistricky/codesnap.nvim", build = "make" },
-		keys = {
-			{
-				"<leader>cc",
-				"<cmd>CodeSnap<cr>",
-				mode = "x",
-				desc = "Save selected code snapshot into clipboard",
-			},
-			{
-				"<leader>cs",
-				"<cmd>CodeSnapSave<cr>",
-				mode = "x",
-				desc = "Save selected code snapshot in ~/Pictures",
-			},
-		},
+		"mistricky/codesnap.nvim",
+		build = "make",
 		opts = {
 			save_path = "~/Pictures/Code_screenshots/",
 			has_breadcrumbs = true,
 			bg_theme = "sea",
 			watermark = "@SamuelSurfboard",
 			bg_x_padding = 52,
-			bg_y_padding = 42,
+			bg_y_padding = 82,
+			watermark_font_family = "JetBrainsMono Nerd Font",
+			watermark_font_size = 20,
+			watermark_color = "orange",
 		},
 	},
 }

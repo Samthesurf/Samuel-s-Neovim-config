@@ -22,7 +22,7 @@ return {
 				"emmet_language_server",
 				"cssls",
 				"gopls",
-				"tsserver",
+				"ts_ls",
 				"jsonls",
 				"biome",
 				"jdtls",
