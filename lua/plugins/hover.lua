@@ -1,16 +1,14 @@
 return {
 	"lewis6991/hover.nvim",
 	config = function()
-		require("hover").setup({
-			init = function()
-				-- Require providers
-				require("hover.providers.lsp")
-				-- require('hover.providers.gh')
-				-- require('hover.providers.gh_user')
-				-- require('hover.providers.jira')
-				-- require('hover.providers.man')
-				-- require("hover.providers.dictionary")
-			end,
+		require("hover").config({
+			providers = {
+				"hover.providers.diagnostic",
+				"hover.providers.lsp",
+				"hover.providers.dap",
+				"hover.providers.man",
+				"hover.providers.dictionary",
+			},
 			preview_opts = {
 				border = "single",
 			},
@@ -19,16 +17,32 @@ return {
 			preview_window = false,
 			title = false,
 			mouse_providers = {
-				"LSP",
+				"hover.providers.lsp",
 			},
 			mouse_delay = 500,
 		})
+
 		local map = vim.keymap.set
-		-- Setup keymaps
-		-- map("n", "K", require("hover").hover, {desc = "hover.nvim"})
-		map("n", "gK", require("hover").hover_select, { desc = "hover.nvim (select)" })
-        vim.o.mousemoveevent = true
-		-- Mouse support
-		map("n", "<MouseMove>", require("hover").hover_mouse, { desc = "hover.nvim (mouse)" })
+
+		map("n", "K", function()
+			require("hover").open()
+		end, { desc = "hover.nvim (open)" })
+
+		map("n", "gK", function()
+			require("hover").enter()
+		end, { desc = "hover.nvim (enter)" })
+
+		map("n", "<C-p>", function()
+			require("hover").switch("previous")
+		end, { desc = "hover.nvim (previous source)" })
+
+		map("n", "<C-n>", function()
+			require("hover").switch("next")
+		end, { desc = "hover.nvim (next source)" })
+
+		vim.o.mousemoveevent = true
+		map("n", "<MouseMove>", function()
+			require("hover").mouse()
+		end, { desc = "hover.nvim (mouse)" })
 	end,
 }

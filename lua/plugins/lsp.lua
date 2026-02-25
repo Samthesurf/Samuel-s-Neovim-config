@@ -1,22 +1,20 @@
 return {
 	{
 		"neovim/nvim-lspconfig",
-		-- event = "BufReadPre",
 		config = function()
-			local nvim_lsp = require("lspconfig")
-			nvim_lsp.pyright.setup({
-				settings = {
-					pyright = {
-						disableOrganizeImports = true,
-					},
-					python = {
-						analysis = {
-							"openFilesOnly",
-						},
-					},
-				},
-			})
-			local servers = {
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			local has_cmp_lsp, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+			if has_cmp_lsp then
+				capabilities = vim.tbl_deep_extend("force", capabilities, cmp_lsp.default_capabilities())
+			end
+			capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+			local function setup(server, config)
+				vim.lsp.config(server, config or {})
+				vim.lsp.enable(server)
+			end
+
+			for _, server in ipairs({
 				"ruff",
 				"bashls",
 				"emmet_language_server",
@@ -26,43 +24,56 @@ return {
 				"jsonls",
 				"biome",
 				"jdtls",
-			}
-			for _, lsp in ipairs(servers) do
-				nvim_lsp[lsp].setup({})
+			}) do
+				setup(server, { capabilities = capabilities })
 			end
-			--Enable (broadcasting) snippet capability for completion
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-			nvim_lsp.html.setup({
+			setup("pyright", {
 				capabilities = capabilities,
-			})
-
-			-- require'lspconfig'.pylyzer.setup{}
-			nvim_lsp.clangd.setup({
-				cmd = { "clangd", "--clang-tidy" },
-				filetypes = { "c", "cpp" },
-				root_dir = require("lspconfig").util.root_pattern(".git", "compile_commands.json"),
-			})
-			local cmp1 = require("cmp")
-			cmp1.setup({ sources = { name = "nvim_lsp" } })
-			require("lspconfig").lua_ls.setup({
-				Lua = {
-					diagnostics = {
-						libraryFiles = "Disable",
+				settings = {
+					pyright = {
+						disableOrganizeImports = true,
 					},
-					workspace = {
-						checkThirdParty = false,
-						maxPreload = 2,
-					},
-					telemetry = { enable = false },
-					hint = {
-						enable = true,
+					python = {
+						analysis = {
+							diagnosticMode = "openFilesOnly",
+						},
 					},
 				},
 			})
-			-- Neovim config for PowerShell Editor Services
-			require("lspconfig").powershell_es.setup({
+
+			setup("html", {
+				capabilities = capabilities,
+			})
+
+			setup("clangd", {
+				capabilities = capabilities,
+				cmd = { "clangd", "--clang-tidy" },
+				filetypes = { "c", "cpp" },
+				root_markers = { "compile_commands.json", ".git" },
+			})
+
+			setup("lua_ls", {
+				capabilities = capabilities,
+				settings = {
+					Lua = {
+						diagnostics = {
+							libraryFiles = "Disable",
+						},
+						workspace = {
+							checkThirdParty = false,
+							maxPreload = 2,
+						},
+						telemetry = { enable = false },
+						hint = {
+							enable = true,
+						},
+					},
+				},
+			})
+
+			setup("powershell_es", {
+				capabilities = capabilities,
 				cmd = {
 					"pwsh",
 					"-NoLogo",
@@ -75,15 +86,10 @@ return {
 				},
 				filetypes = { "powershell" },
 			})
-			-- local on_attach = function(client)
-			-- 	if client.name == "ruff" then
-			-- 		client.server_capabilitiies.hoverProvider = false
-			-- 	end
-			-- end
 
-			nvim_lsp.asm_lsp.setup({
-				-- on_attach = on_attach,
-				root_dir = nvim_lsp.util.root_pattern(".asm-lsp.toml", ".git"),
+			setup("asm_lsp", {
+				capabilities = capabilities,
+				root_markers = { ".asm-lsp.toml", ".git" },
 			})
 		end,
 	},

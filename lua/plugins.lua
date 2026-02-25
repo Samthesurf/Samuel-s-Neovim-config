@@ -134,17 +134,6 @@ return {
 		end,
 	},
 	{
-		"Exafunction/codeium.nvim",
-		event = "BufReadPre",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"hrsh7th/nvim-cmp",
-		},
-		config = function()
-			require("codeium").setup({})
-		end,
-	},
-	{
 		"RRethy/nvim-base16",
 	},
 	{
@@ -192,17 +181,26 @@ return {
 	},
 	{
 		"mistricky/codesnap.nvim",
-		build = "make",
 		opts = {
-			save_path = "~/Pictures/Code_screenshots/",
-			has_breadcrumbs = true,
-			bg_theme = "sea",
-			watermark = "@SamuelSurfboard",
-			bg_x_padding = 52,
-			bg_y_padding = 82,
-			watermark_font_family = "JetBrainsMono Nerd Font",
-			watermark_font_size = 20,
-			watermark_color = "orange",
+			snapshot_config = {
+				window = {
+					margin = {
+						x = 52,
+						y = 82,
+					},
+				},
+				code_config = {
+					font_family = "JetBrainsMono Nerd Font",
+					breadcrumbs = {
+						enable = true,
+					},
+				},
+				watermark = {
+					content = "@SamuelSurfboard",
+					font_family = "JetBrainsMono Nerd Font",
+					color = "#FFA500",
+				},
+			},
 		},
 	},
 }

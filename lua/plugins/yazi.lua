@@ -1,25 +1,22 @@
 return {
   "mikavilpas/yazi.nvim",
+  version = "*",
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
   event = "VeryLazy",
+  cmd = { "Yazi" },
   keys = {
-    -- 👇 in this section, choose your own keymappings!
     {
       "<leader>-",
-      function()
-        require("yazi").yazi()
-      end,
-      { desc = "Open yazi file manager" },
+      "<cmd>Yazi<cr>",
+      mode = { "n", "v" },
+      desc = "Open yazi file manager",
     },
     {
-      -- Open in the current working directory
       "<leader>cw",
-      function()
-        require("yazi").yazi(nil, vim.fn.getcwd())
-      end,
-      { desc = "Open the yazi file manager in nvim's working directory" },
+      "<cmd>Yazi cwd<cr>",
+      desc = "Open yazi in nvim working directory",
     },
   },
   -- -@type YaziConfig

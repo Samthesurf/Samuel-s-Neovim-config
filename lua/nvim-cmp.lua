@@ -102,7 +102,6 @@ local cmp_status_ok, cmp = pcall(require, "cmp")
 					vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
 					-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
 					vim_item.menu = ({
-						codeium = "AI",
 						nvim_lsp = "LSP",
 						luasnip = "Snippet",
 						buffer = "Buffer",
@@ -112,7 +111,6 @@ local cmp_status_ok, cmp = pcall(require, "cmp")
 				end,
 			},
 			sources = {
-				{ name = "codeium" },
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
 				{ name = "buffer" },
