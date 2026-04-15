@@ -35,7 +35,7 @@ augroup exe_code
     \ :TermExec cmd="dart run %" size=60 direction=vertical <CR>
 augroup END
 ]])
-vim.cmd([[au BufEnter * :ColorizerToggle]])
+-- colorizer auto-attaches via the new catgoose/nvim-colorizer.lua plugin
 -- Format Python files on save
 vim.cmd([[au BufWritePre *.py :lua vim.lsp.buf.format{timeout_ms = 10000}]])
 -- Format Lua files on save

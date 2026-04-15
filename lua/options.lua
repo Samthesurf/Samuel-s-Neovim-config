@@ -1,3 +1,7 @@
+-- Skip the deprecated ts_context_commentstring nvim-treesitter module.
+-- Must be set before plugins load to prevent the CursorHold autocmd.
+vim.g.skip_ts_context_commentstring_module = true
+
 local opt = vim.opt
 local map = vim.keymap.set
 vim.o.mouse = "a"
